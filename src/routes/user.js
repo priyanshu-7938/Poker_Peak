@@ -37,7 +37,12 @@ router.post("/login",async (req,res)=>{
             }
             let token = await user.generateAuthToken();
 
-            const loggedInUser=await User.findById(user._id).select("-password");
+            const loggedInUser=await User.findById(user._id);
+
+            const obj = loggedInUser.toObject();
+            delete obj.password;
+            delete obj.otp;
+            delete obj.address;
             const options={
                 httpOnly:true,
                 secure:true
@@ -45,7 +50,7 @@ router.post("/login",async (req,res)=>{
             return res.status(200).cookie("accessToken",token,options).json({
                 status:"succesfull",
                 data:{
-                    token,userInfo:loggedInUser
+                    token,userInfo:obj
                 },
                 message:"Succesfull Login"
             })
