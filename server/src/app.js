@@ -28,7 +28,7 @@ const io = new Server(httpServer,{
 });
 
 io.on("connection",(socket)=>{
-  console.log(`User COnnected :${socket}`)
+  console.log(`User Connected :${socket.id}`);
   socket.on("message",(data)=>{
     console.log(data?.event);
     socket.broadcast.emit("recieve_message",{...data});

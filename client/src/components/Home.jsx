@@ -11,9 +11,10 @@ export default function Home(){
             <div>Hello home half section...</div>
             <div>
                 <Routes>
-                    <Route path="/account" element={<Account />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/tournament" element={<Tournament />} />
+                    <Route path="account" element={<Account />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="tournament" element={<Tournament />} />
+
                     <Route path="*" element={<NoPage />} />
                 </Routes>
             </div>

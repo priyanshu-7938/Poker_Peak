@@ -1,7 +1,7 @@
 import { useState , useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SocketContextProvier from './socketContext';
-import { NoPage, Login, SignUp, Room } from "./pages";
+import { NoPage, Login, SignUp, Room, Welcome } from "./pages";
 import Home from "./components/Home"
 
 
@@ -13,18 +13,15 @@ function App() {
       <div>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Home />}>
-              <Route path="blogs" element={<SignUp />} />
-              <Route path="login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Welcome />}/>
+              <Route path="/home/*" element={<Home />}/>
               <Route path="*" element={<NoPage />} />
-              </Route>
               <Route path="/room/:roomToken" element={<Room />}></Route>
             </Routes>
         </BrowserRouter>
       </div>
-      <p>
-        Hello!!
-      </p>
     </>
   )
 }
