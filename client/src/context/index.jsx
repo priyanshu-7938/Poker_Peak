@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useState } from "react";
 
-
 const thisContext = createContext();
 
 export default function ContextProvierAllOver({ children }){
-    const [ value, setValue ] = useState(0);
+    const [ userData, setUserData ] = useState();
 
-
+    
     return (
         <thisContext.Provider value={{
-            value,
-        }}>
+            userData,
+            setUserData, 
+        }}> 
             { children }
         </thisContext.Provider>
     )

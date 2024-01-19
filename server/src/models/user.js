@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'must have a name'],
       trim: true,
+      unique: true,
     },
     token: {
         type: String,

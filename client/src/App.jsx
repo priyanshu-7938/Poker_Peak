@@ -1,6 +1,6 @@
 import { useState , useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SocketContextProvier from './socketContext';
+// import SocketContextProvier from './socketContext';
 import { NoPage, Login, SignUp, Room, Welcome } from "./pages";
 import Home from "./components/Home"
 
