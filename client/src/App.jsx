@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="bg-[#FAF6F0] h-screen font-montserrat">
           <BrowserRouter>
             <Routes>
               <Route path="/signup" element={<SignUp />} />

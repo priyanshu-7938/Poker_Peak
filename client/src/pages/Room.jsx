@@ -1,27 +1,21 @@
-import React,{ useEffect } from "react";
+import React,{ useEffect, useState } from "react";
 import { useSocketContext } from "../socketContext";
 import { socket } from "../socket";
+import useSocketSetupForRoom from "../socketUtils/useSocketSetupForRoom";
 
 export default function Room(){
-
-    console.log(useSocketContext());
+    const [ message, setMessage ] = useState("");
     const { emitMessage } = useSocketContext();
     const sendMessage = ()=>{
       emitMessage("helo");
       console.log("emmited");
     }
-
-    useEffect(()=>{
-        console.log("in the useEffect");
-        socket.on("message",(data)=>{
-            console.log("in the socket.on");
-            alert(data.event);});
-
-    },[socket]);
+    
+    useSocketSetupForRoom();
 
     return (
         <p>
-            the page is the room one...
+            the page is the room one... message : {message}
             <button onClick={sendMessage}>emit the message..</button>
         </p>
     )
