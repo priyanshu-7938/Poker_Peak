@@ -33,6 +33,9 @@ io.on("connection",(socket)=>{
     console.log(data?.event);
     socket.broadcast.emit("recieve_message",{...data});
   });
+  socket.on("disconnect", () => {
+    console.log(`User Disconnected: ${socket.id}`);
+  });
 })
 
 
