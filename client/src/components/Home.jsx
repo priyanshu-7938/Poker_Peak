@@ -24,11 +24,11 @@ export default function Home() {
     <div className="h-screen flex flex-col">
       <Navbar />
       <div className="bg-[#3f3f3f] h-[3px]"></div>
-      <div className="flex flex-1">
-        <div className="w-[10%]">
+      <div className="flex-1 flex space-x-2">
+        <div className="px-4">
           <Sidebar />
         </div>
-        <div className="w-[2px] bg-[#3f3f3f]">
+        <div className="w-[2px] bg-[#3f3f3f]"></div>
           <Routes>
             <Route path="account" element={<Account />} />
             <Route path="rooms" element={<Rooms />} />
@@ -38,7 +38,6 @@ export default function Home() {
             <Route path="*" element={<NoPage />} />
           </Routes>
         </div>
-      </div>
     </div>
   );
 }

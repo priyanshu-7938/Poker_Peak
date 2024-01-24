@@ -1,8 +1,15 @@
 // import React from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Sidebar(){
-    const thisUrl = window.location.href;
+    const location = useLocation();
+    const thisUrl = location.pathname;
+
+    useEffect(() => {
+        console.log('url : ', location.pathname);
+    }, [location]);
+
     return (
         <div className="flex flex-col h-full">
             <div className="flex flex-col gap-3 mt-3">
