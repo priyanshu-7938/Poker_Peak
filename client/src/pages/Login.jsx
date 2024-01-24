@@ -6,12 +6,14 @@ import { message } from "react-message-popup";
 import Loading from "../utils/Loading";
 import { useTheContext } from "../context";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 
 export default function Login() {
   const address = useAddress();
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { setUserData } = useTheContext();
+  const token = localStorage.getItem("token");
 
   const [password, setPassword] = useState("");
   const [load, setLoad] = useState(false);
@@ -55,6 +57,7 @@ export default function Login() {
       if (parsedResult?.status === "succesfull") {
         message.success("Logged in!!");
         setUserData(parsedResult?.data);
+        localStorage.setItem("token", parsedResult?.data.token);
         Navigate("/home/dashboard");
       } else {
         console.log(result);
@@ -67,6 +70,10 @@ export default function Login() {
       }, 1000);
     }
   };
+
+  if (token) {
+    return <Navigate to="/home/dashboard" />;
+  }
 
   return (
     <>
@@ -103,7 +110,7 @@ export default function Login() {
                     <button
                       className="bg-[#ebdccb] w-[30%] mt-5 p-1 rounded-[20px] font-bold flex items-center justify-center"
                       onClick={() => {
-                        Navigate("/signup");
+                        navigate("/signup");
                       }}
                     >
                       <p className="text-3xl">🐻</p>Sign up
