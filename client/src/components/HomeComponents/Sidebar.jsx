@@ -11,7 +11,7 @@ export default function Sidebar(){
     }, [location]);
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full bg-accent">
             <div className="flex flex-col gap-3 mt-3">
                 <Link to={"account"}>
                     <div className="flex gap-1 items-center">

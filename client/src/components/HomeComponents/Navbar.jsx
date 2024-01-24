@@ -18,7 +18,7 @@ export default function Navbar() {
     
   return (
     <>
-      <div className="h-[50px] flex justify-between">
+      <div className="h-[50px] flex justify-between py-4 pb-6 border-b border-gray-600">
         <div className="flex gap-2 items-center">
           <div className="flex items-center justify-center">
             <img src={logo} className="h-[40px]" alt="" />
