@@ -1,4 +1,4 @@
-import React,{ useEffect } from "react";
+import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Account, Dashboard, Tournament, AddMoney } from "../components";
 import { NoPage } from "../pages";
@@ -6,6 +6,8 @@ import Navbar from "./HomeComponents/Navbar";
 import Sidebar from "./HomeComponents/Sidebar";
 import { useTheContext } from "../context";
 import { useAddress } from "@thirdweb-dev/react";
+import { message } from "react-message-popup";
+import Rooms from "./Rooms";
 
 export default function Home(){
     const { userData, setUserData } = useTheContext();
@@ -31,6 +33,7 @@ export default function Home(){
                 <div>
                     <Routes>
                         <Route path="account" element={<Account />} />
+                        <Route path="rooms" element={<Rooms />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="tournament" element={<Tournament />} />
                         <Route path="addMoney" element={<AddMoney />} />
