@@ -30,12 +30,12 @@ contract PokerRoom is RrpRequesterV0{
     uint8 userCount;
     bool public theDeckCreated = false;
     string deckHash = "";
-    uint256 public GENERATEDRANDOMNUMBER= 11312300201045626;//from QRNG.
-    bool public ISNUMBERGENERATED;
-    bool public APPLIEDFORRANDOMNUMBERGENERATION;
-    bool public ISDECKCREATED;
-    bool public ISROOTDECKPUBLISHED;
-    bool public ISPRIVATEKEYEXPOSED;
+    uint256 private GENERATEDRANDOMNUMBER= 11312300201045626;//from QRNG.
+    bool private ISNUMBERGENERATED;
+    bool private APPLIEDFORRANDOMNUMBERGENERATION;
+    bool private ISDECKCREATED;
+    bool private ISROOTDECKPUBLISHED;
+    bool private ISPRIVATEKEYEXPOSED;
     uint256 GAMENONCE;
     string public PRIVATEKEYTODECODECARDS;// will be posted after the each game.
     GameState public stateDefiner = GameState.RESTING;//CLEANUP:make private later
@@ -45,8 +45,8 @@ contract PokerRoom is RrpRequesterV0{
     //QRNG variables
 
     
-    address public airnode = 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D;
-    bytes32 public endpointIdUint256 = 0x94555f83f1addda23fdaa7c74f27ce2b764ed5cc430c66f5ff1bcf39d583da36;
+    address public airnode = 0x9d3C147cA16DB954873A498e0af5852AB39139f2;
+    bytes32 public endpointIdUint256 = 0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78;
     address public sponsorWallet;
     address public _airnodeRrp = 0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd;
     // uint256 public _qrngUint256;            // The random number returned by the QRNG Airnode

@@ -107,7 +107,7 @@ userSchema.statics.findByAddress = async (address, password) => {
   if (!isMatch) {
     throw new Error('Unable to Login');
   }
-  return user;
+  return user;  
 };
 
 userSchema.statics.findById = async (_id) => {
@@ -116,6 +116,19 @@ userSchema.statics.findById = async (_id) => {
       throw new Error('Unable to Login');
     }
     return user;
+};
+
+userSchema.statics.findByAddressValue = async (address) => {
+  const user = await User.findOne({ address });
+  if (!user) {
+    throw new Error('Unable to fetch user for the game room.');
+  }
+  return user;
+};
+
+userSchema.statics.validateToken = async ( token, _id ) => {
+  const user = await User.findOne({_id});
+  return token == user?.token;
 };
 
 userSchema.pre('save', async function (next) {

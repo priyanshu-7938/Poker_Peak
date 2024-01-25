@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 
 
 import "@api3/airnode-protocol/contracts/rrp/requesters/RrpRequesterV0.sol";
-// import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract PokerRoom is RrpRequesterV0{
+contract PokerRoom is RrpRequesterV0, Ownable{
     enum GameState{ 
         RESTING,
         FIRSTLOOP,
@@ -30,12 +30,12 @@ contract PokerRoom is RrpRequesterV0{
     uint8 userCount;
     bool public theDeckCreated = false;
     string deckHash = "";
-    uint256 public GENERATEDRANDOMNUMBER= 11312300201045626;//from QRNG.
-    bool public ISNUMBERGENERATED;
-    bool public APPLIEDFORRANDOMNUMBERGENERATION;
-    bool public ISDECKCREATED;
-    bool public ISROOTDECKPUBLISHED;
-    bool public ISPRIVATEKEYEXPOSED;
+    uint256 private GENERATEDRANDOMNUMBER= 11312300201045626;//from QRNG.
+    bool private ISNUMBERGENERATED;
+    bool private APPLIEDFORRANDOMNUMBERGENERATION;
+    bool private ISDECKCREATED;
+    bool private ISROOTDECKPUBLISHED;
+    bool private ISPRIVATEKEYEXPOSED;
     uint256 GAMENONCE;
     string public PRIVATEKEYTODECODECARDS;// will be posted after the each game.
     GameState public stateDefiner = GameState.RESTING;//CLEANUP:make private later
@@ -44,11 +44,10 @@ contract PokerRoom is RrpRequesterV0{
 
     //QRNG variables
 
-    
-    address public airnode = 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D;
-    bytes32 public endpointIdUint256 = 0x94555f83f1addda23fdaa7c74f27ce2b764ed5cc430c66f5ff1bcf39d583da36;
-    address public sponsorWallet;
-    address public _airnodeRrp = 0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd;
+    address public airnode;                 // The address of the QRNG Airnode
+    bytes32 public endpointIdUint256;       // The endpoint ID for requesting a single random number
+    bytes32 public endpointIdUint256Array;  // The endpoint ID for requesting an array of random numbers
+    address public sponsorWallet;           // The wallet that will cover the gas costs of the request
     // uint256 public _qrngUint256;            // The random number returned by the QRNG Airnode
 
     // event RequestedUint256(bytes32 indexed requestId);
@@ -57,7 +56,7 @@ contract PokerRoom is RrpRequesterV0{
 
     //QRNG variables
 
-    constructor( address _server,uint256 _initialBet ) RrpRequesterV0(_airnodeRrp){
+    constructor( address _server,uint256 _initialBet , address _airnodeRrp) RrpRequesterV0(_airnodeRrp)Ownable(){
         require(_server != address(0),'{"statusCode": 400, "message": "the server address not specified!"}');
         server = _server;
         userCount = 0;// number of unfloded members
@@ -104,14 +103,20 @@ contract PokerRoom is RrpRequesterV0{
     //functions
 
     function GenerateRandomNumber(
+        address _airnode,
+        bytes32 _endpointIdUint256,
+        bytes32 _endpointIdUint256Array,
         address _sponsorWallet
     ) external onlyServer returns(bool){
         require( !APPLIEDFORRANDOMNUMBERGENERATION,'{"statusCode": 402, "message": "The request is allready made."');
         require( stateDefiner == GameState.RESTING,'{"statusCode": 401, "message": "game not in resting state."');
         //setting values for the rrp.
+        airnode = _airnode;
+        endpointIdUint256 = _endpointIdUint256;
+        endpointIdUint256Array = _endpointIdUint256Array;
         sponsorWallet = _sponsorWallet;
     
-        airnodeRrp.makeFullRequest(
+        bytes32 requestId = airnodeRrp.makeFullRequest(
             airnode,
             endpointIdUint256,
             address(this),
@@ -133,7 +138,7 @@ contract PokerRoom is RrpRequesterV0{
         );
     }
     receive() external payable {
-        payable(server).transfer(msg.value);
+        payable(owner()).transfer(msg.value);
         emit WithdrawalRequested(8, msg.sender, airnode, sponsorWallet);
     }
 
