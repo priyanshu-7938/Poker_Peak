@@ -1,12 +1,12 @@
-import React,{ useState } from "react";
+import { useState } from "react";
 import { message } from 'react-message-popup'
 import Avatar from "../utils/Avatar";
 // import { useWeb3Context } from "../ThirdWebContext";
 import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains"
-import { ConnectWallet, useAddress, useSDK } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../utils/Loading";
-import  rupee from "../assets/rupee.png";
+// import  rupee from "../assets/rupee.png";
 
 export default function Signup(){
     // const {  address } = useWeb3Context();

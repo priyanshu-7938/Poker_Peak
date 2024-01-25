@@ -10,13 +10,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
     "@thirdweb-dev/react": "^4.3.2",
     "@thirdweb-dev/sdk": "^4.0.27",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
     "dotenv": "^16.3.1",
+    "lucide-react": "^0.314.0",
+    "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-message-popup": "^2.0.0-alpha.0",
-    "socket.io-client": "^4.7.4"
+    "socket.io-client": "^4.7.4",
+    "tailwind-merge": "^2.2.1",
+    "tailwindcss-animate": "^1.0.7",
+    "url": "^0.11.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

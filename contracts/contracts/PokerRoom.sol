@@ -3,7 +3,6 @@ pragma solidity ^0.8.0;
 
 
 import "@api3/airnode-protocol/contracts/rrp/requesters/RrpRequesterV0.sol";
-// import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract PokerRoom is RrpRequesterV0{
     enum GameState{ 
