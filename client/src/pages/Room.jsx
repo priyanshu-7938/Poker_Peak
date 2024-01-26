@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useSocketContext } from "../socketContext";
-import { socket } from "../socket";
-import useSocketSetupForRoom from "../socketUtils/useSocketSetupForRoom";
+// import React, { useEffect, useState } from "react";
+// import { useSocketContext } from "../socketContext";
+// import { socket } from "../socket";
+// import useSocketSetupForRoom from "../socketUtils/useSocketSetupForRoom";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import OtherPlayers from "@/components/game/OtherPlayers";
+import PlayerCard from "@/components/game/PlayerCard";
 
 export default function Room() {
   // const [message, setMessage] = useState("");
@@ -67,7 +67,7 @@ export default function Room() {
                   `${index === 0 ? 'absolute  top-0 left-4' : index === 4 ? 'absolute top-0 right-3' : index === 3 ? 'relative left-[20%] ' : index === 5 ? 'absolute left-[40%] mb-[70px] px-3 border rounded-md border-black' : ''}`
                 }`}
               >
-                <OtherPlayers {...player} />
+                <PlayerCard {...player} />
               </div>
             ))}
           </div>
