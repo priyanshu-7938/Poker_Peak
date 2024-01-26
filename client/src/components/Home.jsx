@@ -4,20 +4,25 @@ import { Account, Dashboard, Tournament, AddMoney } from "../components";
 import { NoPage, Room } from "../pages";
 import Navbar from "./HomeComponents/Navbar";
 import Sidebar from "./HomeComponents/Sidebar";
-import { useTheContext } from "../context";
+import { fullScreenState } from "../atoms/triggers";
+import { useRecoilValue } from "recoil";
+
 // import { useAddress } from "@thirdweb-dev/react";
 import { message } from "react-message-popup";
 import Rooms from "./Rooms";
 
 export default function Home() {
-  const { setUserData } = useTheContext();
   // const address = useAddress();
   const token = localStorage.getItem("token");
+  const FullScreenTrigger = useRecoilValue(fullScreenState);
 
   if (token == undefined || token == null) {
-    setUserData(null);
     message.info("Session Expired!", 1000);
     return <Navigate to="/login" />;
+  }
+
+  if (FullScreenTrigger) {
+    document.body.style.overflowY = "hidden";
   }
 
   return (
@@ -25,7 +30,8 @@ export default function Home() {
       <Navbar />
       {/* <div className="bg-[#3f3f3f] h-[3px]"></div> */}
       <div className="flex-1 flex ">
-        <div className="px-4 bg-accent">
+        <div className={`${
+          !FullScreenTrigger && "hidden"} px-4 bg-accent`}>
           <Sidebar />
         </div>
 

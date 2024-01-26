@@ -6,10 +6,13 @@ import { useTheContext } from "../../context";
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { fullScreenState } from "@/atoms/triggers";
 
 export default function Navbar() {
   const { userData, setUserData } = useTheContext();
   const Navigate = useNavigate();
+  const FullScreenTrigger = useRecoilValue(fullScreenState);
 
   const logoutHandler = () => {
     setUserData(null);
@@ -18,7 +21,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="h-[50px] flex justify-between py-4 pb-6 border-b border-gray-600">
+      <div className={` ${!FullScreenTrigger && "hidden"} h-[50px] flex justify-between py-4 pb-6 border-b border-gray-600`}>
         <div className="flex gap-2 items-center">
           <div className="flex items-center justify-center">
             <img src={logo} className="h-[40px]" alt="" />

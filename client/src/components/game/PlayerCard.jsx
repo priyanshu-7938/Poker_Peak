@@ -4,7 +4,7 @@ import { Coins } from "lucide-react";
 
 const OtherPlayers = ({ name, balance, bet }) => {
   return (
-    <div className="relative max-w-[175px] z-0 p-4">
+    <div className="relative max-w-[175px] max-h-[180px] z-0 py-2 px-4">
       {/* for blurry effect */}
       <div className="absolute inset-0 w-full h-full -z-10 backdrop-blr-sm"></div>{" "}
       {/* Added "top-0 left-0" to position the blurred div behind the main content */}

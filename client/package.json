@@ -22,6 +22,7 @@
     "react-day-picker": "^8.10.0",
     "react-dom": "^18.2.0",
     "react-message-popup": "^2.0.0-alpha.0",
+    "recoil": "^0.7.7",
     "socket.io-client": "^4.7.4",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",

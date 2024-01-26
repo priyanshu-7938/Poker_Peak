@@ -1,11 +1,10 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ThirdwebProvider } from '@thirdweb-dev/react'
 import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains"
 import App from './App.jsx'
 import './index.css'
-import SocketContextProvier from './socketContext/index.jsx';
 import ContextProvierAllOver from './context/index.jsx';
+import { RecoilRoot } from 'recoil'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,9 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       clientId="5569ec4bd273c9e940fe4ff0cc4dd685"
     >
       {/* <Web3ContextProvider> */}
-        <SocketContextProvier>
+        <RecoilRoot>
           <App />
-        </SocketContextProvier>
+        </RecoilRoot>
       {/* </Web3ContextProvider> */}
     </ThirdwebProvider>
   </ContextProvierAllOver>
