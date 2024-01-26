@@ -28,6 +28,7 @@ export default function Home() {
         <div className="px-4 bg-accent">
           <Sidebar />
         </div>
+
         <div className="w-[2px] bg-[#838383]"></div>
         <Routes>
           <Route path="account" element={<Account />} />

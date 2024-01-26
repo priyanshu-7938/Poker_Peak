@@ -9,13 +9,13 @@ import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const { userData, setUserData } = useTheContext();
-    const Navigate = useNavigate();
+  const Navigate = useNavigate();
 
-    const logoutHandler = () => {
-        setUserData(null);
-        localStorage.removeItem("token");
-    }
-    
+  const logoutHandler = () => {
+    setUserData(null);
+    localStorage.removeItem("token");
+  };
+
   return (
     <>
       <div className="h-[50px] flex justify-between py-4 pb-6 border-b border-gray-600">
@@ -50,14 +50,14 @@ export default function Navbar() {
               <div className="h-[3px] rounded-[10px] bg-[#3f3f3f]"></div>
             </div>
           </div>
-          <ConnectWallet
-            switchToActiveChain={true}
-            displayBalanceToken={{
-              [LightlinkPegasusTestnet.chainId]:
-                "0x89CCf46D641F30E6D04833f1352D6b2DD40c6E12"
-            }}
-            theme="light"
-          />
+            <ConnectWallet
+              switchToActiveChain={true}
+              displayBalanceToken={{
+                [LightlinkPegasusTestnet.chainId]:
+                  "0x89CCf46D641F30E6D04833f1352D6b2DD40c6E12"
+              }}
+              theme="light"
+            />
           <div
             className="flex items-center gap-1 cursor-pointer"
             onClick={logoutHandler}
