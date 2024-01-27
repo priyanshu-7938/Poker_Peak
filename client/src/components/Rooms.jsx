@@ -9,12 +9,12 @@ const Rooms = () => {
   const navigate = useNavigate();
 
   // when the user signs the room entry contract then the user is given is given with a unique id to enter the specific rooom
-  const uniqueToken = 1232;
+  const roomToken = 1232;
 
   const rooms = [1, 2, 3, 4]; //static rooms data
 
   const joinHandler = () => {
-    return navigate(`room?roomToken=${uniqueToken}`);
+    return navigate(`room?roomToken=${roomToken}`);
   };
 
   return (
@@ -40,7 +40,7 @@ const Rooms = () => {
               <Button onClick={joinHandler} className="px-10 text-lg" size="sm">
                 Join
               </Button>
-              <p className='self-end py-2 mr-2'>{id}/6</p>
+              <p className="self-end py-2 mr-2">{id}/6</p>
             </div>
           </div>
         ))}

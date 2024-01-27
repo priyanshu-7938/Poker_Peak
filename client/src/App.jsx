@@ -3,9 +3,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import SocketContextProvier from './socketContext';
 import { NoPage, Login, SignUp, Room, Welcome } from "./pages";
 import Home from "./components/Home";
+import { useEffect } from "react";
+import useSocket from "./hooks/useSocket";
 
 function App() {
-  // const [count, setCount] = useState(0);
+  const socket = useSocket(); 
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log('connected socket.id : ', socket.id);
+    })
+  }, []);
 
   return (
     <>

@@ -1,4 +1,4 @@
-// import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 // import { useSocketContext } from "../socketContext";
 // import { socket } from "../socket";
 // import useSocketSetupForRoom from "../socketUtils/useSocketSetupForRoom";
@@ -8,13 +8,34 @@ import { ArrowRight, Fullscreen, Shrink } from "lucide-react";
 import PlayerCard from "@/components/game/PlayerCard";
 import { useRecoilState } from "recoil";
 import { fullScreenState } from "@/atoms/triggers";
+import useSocket from "@/hooks/useSocket";
+import Chats from "@/components/game/Chats";
+import { Toaster, toast } from "sonner";
 
 export default function Room() {
   // const [message, setMessage] = useState("");
   // const { emitMessage } = useSocketContext();
   const [params] = useSearchParams();
   const roomToken = params.get("roomToken");
-  const [FullScreenTrigger, setFullScreenTrigger] = useRecoilState(fullScreenState);
+  const [FullScreenTrigger, setFullScreenTrigger] =
+    useRecoilState(fullScreenState);
+
+  const socket = useSocket();
+
+  useEffect(() => {
+    socket.emit("joinRoom", { roomName: roomToken });
+
+    socket.emit("message", (msg) => {
+      console.log(`New message received: ${msg}`);
+      
+    });
+
+  }, [socket]);
+
+  const leaveRoom = () => {
+    socket.emit("leaveRoom", { roomName: roomToken });
+    toast("You left the room !");
+  };
   // const sendMessage = () => {
   //   emitMessage("helo");
   //   console.log("emmited");
@@ -40,8 +61,13 @@ export default function Room() {
 
   return (
     <main className="w-full h-full bg-gradient-to-tr from-[#8b0000c7] via-[#580101] to-[#8B0000]  rounded-md">
+      <Toaster />
+      {/* Chat Application */}
+      <div className='absolute bottom-2 right-0 z-10'>
+        <Chats roomName={roomToken} />
+      </div>
       {/* Container */}
-      <div className="pt-7 px-7 pb-2 flex flex-col h-full w-full justify-between">
+      <div className="z-0 pt-7 px-7 pb-2 flex flex-col h-full w-full justify-between">
         {/* upper side */}
         <div className="flex justify-between">
           <h1 className="text-xl font-medium">RoomId : {roomToken}</h1>
@@ -64,7 +90,11 @@ export default function Room() {
           </Button>
           <div className="flex flex-col gap-2">
             <h3 className="text-xl font-medium">Players : {"3/6"}</h3>
-            <Button variant={"secondary"} className="bg-red-700">
+            <Button
+              onClick={leaveRoom}
+              variant={"secondary"}
+              className="bg-red-700"
+            >
               Leave
               <ArrowRight className="ml-2" />
             </Button>
