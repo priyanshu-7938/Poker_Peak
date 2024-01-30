@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ChevronDown, ChevronUp, SendHorizontal } from "lucide-react";
 import useSocket from "@/hooks/useSocket";
 
-// eslint-disable-next-line react/prop-types
 const Chats = ({ roomName }) => {
   const socket = useSocket();
 
-  // eslint-disable-next-line no-unused-vars
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [hideMessages, setHideMessages] = useState(false);
