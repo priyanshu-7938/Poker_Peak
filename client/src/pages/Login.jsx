@@ -78,10 +78,10 @@ export default function Login() {
   return (
     <>
       <div className="h-screen flex flex-col gap-1 items-center justify-center">
-        <div className="bg-[#f7eee1] w-[50%] p-5 px-6 shadow-md rounded-[30px]">
+        <div className="bg-primary text-accent w-[50%] p-5 px-6 shadow-md rounded-[30px]">
           <p className="text-4xl font-bold font-goudy">Log In</p>
           <div className="m-2">
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col text-[#e9188b] gap-3">
               <ConnectWallet
                 switchToActiveChain={true}
                 displayBalanceToken={{

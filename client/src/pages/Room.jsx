@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 // import { useSocketContext } from "../socketContext";
 // import { socket } from "../socket";
 // import useSocketSetupForRoom from "../socketUtils/useSocketSetupForRoom";
@@ -17,6 +17,7 @@ export default function Room() {
   // const { emitMessage } = useSocketContext();
   const [params] = useSearchParams();
   const roomToken = params.get("roomToken");
+  const [loading, setLoading] = useState(true);
   const [FullScreenTrigger, setFullScreenTrigger] =
     useRecoilState(fullScreenState);
 
@@ -30,6 +31,10 @@ export default function Room() {
       
     });
 
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
   }, [socket]);
 
   const leaveRoom = () => {
@@ -41,6 +46,14 @@ export default function Room() {
   //   console.log("emmited");
   // };
   // useSocketSetupForRoom();
+
+  if (loading) {
+    return <img
+      src='/assets/spinner.svg'
+      className='m-auto bg-black'
+      alt='loading....'
+    />
+  }
 
   if (!roomToken) {
     return <Navigate to="/home/rooms" />;
