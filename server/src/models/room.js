@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
 import User from "./user.js";
-import { getARandomDeck, decryptWithPrivateKey, encryptWithPublicKey } from "../utils/cardDeck";
+import { getARandomDeck, decryptWithPrivateKey, encryptWithPublicKey, GenrateSopnecerWallet } from "../utils/cardDeck.js";
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
 const roomSchema = new mongoose.Schema(
     {
@@ -13,7 +14,7 @@ const roomSchema = new mongoose.Schema(
         users: [
             {
                 id:{
-                    type: Schema.Types.ObjectId,
+                    type: mongoose.Schema.Types.ObjectId,
                     ref: 'User',
                 },
                 isFolded: {
@@ -40,9 +41,20 @@ const roomSchema = new mongoose.Schema(
         },
         randomNumberGenerated: {
             type: Boolean,
-            
         },
-        
+        memberCount: {
+            type: Number,
+            default: 0,
+        },
+        contrctAddress: {
+            type: String,
+            unique: true,
+            required: [true, 'must have a contract Address'],
+        },
+        sponcerAddress: {
+            type: String,
+            unique: true,
+        }
     },
     {
         timestamps: true
@@ -56,6 +68,14 @@ roomSchema.methods.getFirst3Cards = function() {
     }
 };
 
+userSchema.statics.findByAddressValue = async (contrctAddress) => {
+    const user = await Room.findOne({ contrctAddress });
+    if (!user) {
+        return undefined;
+    }
+    return user;
+  };
+
 roomSchema.methods.getFirst4Cards = function() {
     if( this.status == 'secondloop' || this.stauts == 'thirdloop'){
         return decryptWithPrivateKey( this.encryptedGameDeck, this.privateKey).slice(-5).slice(0,4);
@@ -68,37 +88,56 @@ roomSchema.methods.getFirst5Cards = function() {
     }
 };
 
-roomSchema.methods.getUserCardsVisId = function(_id) {
-    const user = User.findById(_id);
+roomSchema.methods.getUserCardsVisId = function(userId) {
+    const room = Room.findById(_id);
+    const users = room.users;
+
+
     
 }
 roomSchema.methods.decodeCards = function() {
-  // your decoding logic here
+    // your decoding logic here
 };
 
 // instance method to add a user to the room
-roomSchema.methods.addUser = function(userId) {
-  // your logic to add a user to the room here
-};
-
-// instance method to remove a user from the room
-roomSchema.methods.removeUser = function(userId) {
-  // your logic to remove a user from the room here
-};
-
-roomSchema.pre('validate', function(next) {
-    if (!this.isNew) {
-      return next();
+roomSchema.methods.addUser = async function(userId) {
+    const room = this;
+    const users = this.users;
+    users.forEach((item)=>{
+        if(item.id == userId){
+            // user allready existsSync...
+        }
+    })
+    for(var el in users){
+        if(el?.id == userId){
+            return false;
+        }
     }
+    //else the user is not present..
+    users.push({id:userId,isFolded:false});
+    await room.save({validateBeforeSave:false});
+    return users;
+};
+// instance method to remove a user from the room
+roomSchema.methods.removeUser = async function(userId) {
+    const room = this;
+    const afterUsers = this.users.filter((item)=>item.id!=userId);
+    this.users = afterUsers;
+    await room.save({validateBeforeSave:false});
+    return this.users;
+    //this is cpoied from the above function so if this contains error check above one too.
+};
+
+roomSchema.methods.initGame = function() {
     const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
         modulusLength: 1024,
         publicKeyEncoding: {
-          type: 'spki',
-          format: 'pem',
+            type: 'spki',
+            format: 'pem',
         },
         privateKeyEncoding: {
-          type: 'pkcs8',
-          format: 'pem',
+            type: 'pkcs8',
+            format: 'pem',
         },
     });
     
@@ -108,8 +147,24 @@ roomSchema.pre('validate', function(next) {
     const randomDeck = getARandomDeck();
     
     this.encryptedDeck = randomDeck.map((element,index) => encryptWithPublicKey(element, this.publicKey));
+}
+
+roomSchema.pre('validate', function(next) {
+    if (!this.isNew) {
+        return next();
+    }
+    // const _sponcerAddress = GenrateSopnecerWallet(this.contrctAddress);
+    // this.sponcerAddress = _sponcerAddress;
+    // //creating command to fetch the sponcer wallet....
+    // console.log("in the per fxn.");
+    //allready sending the sponcer wallet together....
+    
     next();
-  });
+});
+
+roomSchema.pre('save', async function (next) {
+    next();
+});
 
 
 const Room = mongoose.model('Room', roomSchema);

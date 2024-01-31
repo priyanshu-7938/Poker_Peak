@@ -3,7 +3,7 @@
 
 async function main() {
     const PokerRoom = await ethers.getContractFactory("PokerRoom");
-    const pokerRoom = await PokerRoom.deploy(/* constructor arguments if any */);
+    const pokerRoom = await PokerRoom.deploy(["0xb055dd94A42356921d0ed99624B02F981Cc29240",100000000]);
   
     // const deployedPokerRoom = await pokerRoom.deployed();
     console.log(pokerRoom?.target);

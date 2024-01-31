@@ -21,6 +21,13 @@ module.exports = {
         "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
       ],
     },
+    pegesisTestnet: {
+      url: "https://replicator.pegasus.lightlink.io/rpc/v1", // Replace with the actual Pantheon testnet URL
+      chainId: 1891, // Replace with the chain ID of the Pantheon testnet
+      accounts: [
+        "0xb468b6263292af56fcb78cfce1fc83ba504422307b4baa6cb99b8f3d01ebd3d0"
+      ],
+    },
   },
   solidity: "0.8.0",
 };
