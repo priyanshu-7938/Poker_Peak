@@ -17,6 +17,7 @@ export default function Room() {
   // const [message, setMessage] = useState("");
   // const { emitMessage } = useSocketContext();
   const [params] = useSearchParams();
+  const [ players, setPlayers ] = useState();
   const roomToken = params.get("roomToken");
   const [loading, setLoading] = useState(true);
   const [FullScreenTrigger, setFullScreenTrigger] =
@@ -39,14 +40,39 @@ export default function Room() {
 
   }, [socket]);
 
+  useEffect(()=>{
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("address", roomToken);
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: 'follow'
+    };
+
+    fetch("http://localhost:2024/fetchUsers", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        setPlayers(JSON.parse(result));
+      })
+      .catch(error => console.log('error', error));
+
+  },[]);
+
+  useEffect(()=>{console.log(players);},[players])
+
   const leaveRoom = () => {
     if(!userAddress || !roomToken){
       alert("Try again later...");
       return;
     }
     socket.emit("leaveRoom", { roomName: roomToken });
-    //doing stufff....
-    // the fetch onemptied.apply..
+    
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -90,20 +116,20 @@ export default function Room() {
     setFullScreenTrigger((prev) => !prev);
   };
 
-  const players = [
-    { name: "Player 1", balance: 2029, bet: 19 },
-    { name: "Player 2", balance: 1500, bet: 15 },
-    { name: "Player 3", balance: 2500, bet: 20 },
-    { name: "Player 4", balance: 1200, bet: 12 },
-    { name: "Player 5", balance: 1100, bet: 10 },
-    { name: "Player 6", balance: 100, bet: 100 }
-  ];
+  // const players = [
+  //   { name: "Player 1", balance: 2029, bet: 19 },
+  //   { name: "Player 2", balance: 1500, bet: 15 },
+  //   { name: "Player 3", balance: 2500, bet: 20 },
+  //   { name: "Player 4", balance: 1200, bet: 12 },
+  //   { name: "Player 5", balance: 1100, bet: 10 },
+  //   { name: "Player 6", balance: 100, bet: 100 }
+  // ];
 
   return (
-    <main className="w-full h-full bg-gradient-to-tr from-[#8b0000c7] via-[#580101] to-[#8B0000]  rounded-md">
+    <main className="w-full h-[100vh] bg-gradient-to-tr from-[#8b0000c7] via-[#580101] to-[#8B0000]  rounded-md">
       <Toaster />
       {/* Chat Application */}
-      <div className='absolute bottom-2 right-0 z-10'>
+      <div className='absolute bottom-2 right-2 z-10'>
         <Chats roomName={roomToken} />
       </div>
       {/* Container */}
@@ -152,7 +178,7 @@ export default function Room() {
             className="absolute w-full h-[73%]
             -bottom-8 flex items-end  space-x-10"
           >
-            {players.map((player, index) => (
+            {players && players.map((player, index) => (
               <div
                 key={index}
                 className={`w-1/2 md:w-1/6 lg:w-1/6 p-2 ${`${

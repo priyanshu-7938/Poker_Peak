@@ -8,7 +8,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import { UserFoldedWithReason } from "./HandelContractEmits/index.js";
+import { betRaised, UserFoldedWithReason, betCalled, deckPost, pKeyExposed, StateDiscloser, WithdrawalRequested, RandomNumberGenerated }  from "./HandelContractEmits/index.js";
 dotenv.config();
 
 const app = express();

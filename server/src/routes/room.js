@@ -40,6 +40,14 @@ router.post("/roomLeave",async (req,res) => {
     res.json({...retur, "status":200});
 });
 
+router.post("/fetchUsers",async (req,res) => {
+    const contract = req.body.address;
+    const room = await Room.findByAddressValue(contract);
+    const retur = await room.allUsers();
+    console.log("in fetch:",retur);
+    res.json(retur);
+});
+
 
 
 

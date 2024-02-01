@@ -99,8 +99,20 @@ roomSchema.methods.getSanitizedRoomInfo = function() {
     return sanitizedRoom;
 };
 
+roomSchema.methods.allUsers = async function(){
+    const room = this;
+    const users = room.users;
+    let userData = [];
+    //get name address avatar
+    for(const i in users){
+        const val = await User.findOne(users[i].id);
+        console.log("val: ",val);
+        userData.push({address: val.address,name: val.name, avatar: val.avatar, isFolded: users[i].isFolded});
+    }
+    return userData;
+}
 
-roomSchema.method.foldUserByAddress = async function(foldAddress){
+roomSchema.methods.foldUserByAddress = async function(foldAddress){
     // changing the status of the user to fold for specific user../
     const room = this;
     console.log("room:",room);
