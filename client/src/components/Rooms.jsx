@@ -23,6 +23,8 @@ const Rooms = () => {
     urlencoded.append("address", address);
     urlencoded.append("userAddress", userAddress);
 
+    console.log('address : ', userAddress);
+
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,

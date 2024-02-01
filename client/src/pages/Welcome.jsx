@@ -1,9 +1,13 @@
 import React from "react";
 import logo from "../assets/logo.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRightToLineIcon } from "lucide-react";
 
 export default function Welcome() {
   const navigator = useNavigate();
+
+  const token = localStorage.getItem('token');
+
   return (
     <div className="h-full p-3">
       <div className="flex justify-between">
@@ -14,7 +18,9 @@ export default function Welcome() {
           <p className="text-2xl font-goudy italic font-bold">Poker Peak</p>
         </div>
         <div className="flex gap-3">
-          <button
+          {(token===null) ? (
+            <>
+              <button
             className="p-1 px-4 rounded-[30px] border-2 bg-[#e9188b] border-[#110a02] hover:scale-x-105 transition-all ease-in-out"
             onClick={() => {
               navigator("/signup");
@@ -30,6 +36,16 @@ export default function Welcome() {
           >
             Log in
           </button>
+            </>
+          ): (
+              <>
+                <Link className='flex hover:text-pink-500' to='/home/dashboard' >
+                  Go to DashBoard
+                  <ArrowRightToLineIcon className='ml-2' />
+                </Link>
+              </>
+          )}
+          
         </div>
       </div>
 

@@ -3,6 +3,15 @@
 @tailwind utilities;
  
 
+.connectWallet-btn {
+  /* display:flex; */
+  padding: 0px 6px !important;
+  height: max-content;
+  /* background-color:rgb(209, 209, 209) !important;
+  color:black !important; */
+  border-color:gray !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
