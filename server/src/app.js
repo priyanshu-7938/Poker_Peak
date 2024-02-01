@@ -96,13 +96,13 @@ const sdk = ThirdwebSDK.fromPrivateKey("b468b6263292af56fcb78cfce1fc83ba50442230
 const contract = await sdk.getContract("0x719A03ae0122cC82621C9a863bdF49D93d419687");
  
 //event for contract...
-contract.events.addEventListener("UserFoldedWithReason", (event) => UserFoldedWithReason(event.data));
-contract.events.addEventListener("betRaised", (event) => betRaised(event.data));
-contract.events.addEventListener("betCalled", (event) => betCalled(event.data));
-contract.events.addEventListener("deckPost", (event) => deckPost(event.data));
-contract.events.addEventListener("pKeyExposed", (event) => pKeyExposed(event.data));
-contract.events.addEventListener("StateDiscloser", (event) => StateDiscloser(event.data));
-contract.events.addEventListener("RandomNumberGenerated", (event) => RandomNumberGenerated(event.data));
-contract.events.addEventListener("WithdrawalRequested", (event) => WithdrawalRequested(event.data));
+contract.events.addEventListener("UserFoldedWithReason", (event) => UserFoldedWithReason(event,io));
+contract.events.addEventListener("betRaised", (event) => betRaised(event,io));
+contract.events.addEventListener("betCalled", (event) => betCalled(event,io));
+contract.events.addEventListener("deckPost", (event) => deckPost(event,io));
+contract.events.addEventListener("pKeyExposed", (event) => pKeyExposed(event,io));
+contract.events.addEventListener("StateDiscloser", (event) => StateDiscloser(event,io));
+contract.events.addEventListener("RandomNumberGenerated", (event) => RandomNumberGenerated(event,io));
+contract.events.addEventListener("WithdrawalRequested", (event) => WithdrawalRequested(event,io));
 
 export default httpServer;

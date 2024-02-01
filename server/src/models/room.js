@@ -68,13 +68,29 @@ roomSchema.methods.getFirst3Cards = function() {
     }
 };
 
-userSchema.statics.findByAddressValue = async (contrctAddress) => {
-    const user = await Room.findOne({ contrctAddress });
-    if (!user) {
+roomSchema.statics.findByAddressValue = async (contrctAddress) => {
+    const room = await Room.findOne({ contrctAddress });
+    if (!room) {
         return undefined;
     }
-    return user;
-  };
+    return room;
+};
+
+roomSchema.method.foldUserByAddress = async function(foldAddress){
+    // changing the status of the user to fold for specific user../
+    const room = this;
+    console.log("room:",room);
+    const users = room.users;
+    const updatedUsers = users.map((item)=>{
+        const oneUser = User.findById(item.id);
+        if(oneUser.address == foldAddress){
+            return {...item ,isFolded: true}
+        }
+        return item;
+    });
+    room.users = updatedusers;
+    await room.save({validateBeforeSave:false});
+}
 
 roomSchema.methods.getFirst4Cards = function() {
     if( this.status == 'secondloop' || this.stauts == 'thirdloop'){
@@ -92,12 +108,20 @@ roomSchema.methods.getUserCardsVisId = function(userId) {
     const room = Room.findById(_id);
     const users = room.users;
 
-
+//yet to be done...
     
 }
+
 roomSchema.methods.decodeCards = function() {
     // your decoding logic here
 };
+
+roomSchema.methods.updatePooledAmounnt = async function(pooledAmount) {
+    const room = this;
+    room.pooledAmount = pooledAmount;
+    await room.save({validateBeforeSave:false});
+};
+
 
 // instance method to add a user to the room
 roomSchema.methods.addUser = async function(userId) {
@@ -167,6 +191,6 @@ roomSchema.pre('save', async function (next) {
 });
 
 
-const Room = mongoose.model('Room', roomSchema);
+const /Room = mongoose.model('Room', roomSchema);
 
 export default Room;
