@@ -176,7 +176,7 @@ roomSchema.methods.addUser = async function(userId) {
 // instance method to remove a user from the room
 roomSchema.methods.removeUser = async function(userId) {
     const room = this;
-    const afterUsers = this.users.filter((item)=>item.id!=userId);
+    const afterUsers = this.users.filter((item)=>item.id.toString() !== userId.toString());
     this.users = afterUsers;
     await room.save({validateBeforeSave:false});
     return this.users;

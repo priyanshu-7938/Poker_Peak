@@ -23,9 +23,10 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<Welcome />} />
+              {/* <Route path="room/:roomToken" element={<Room />}></Route> */}
               <Route path="/home/*" element={<Home />} />
+              <Route path="/room" element={<Room />}></Route>
               <Route path="*" element={<NoPage />} />
-              <Route path="/room/:roomToken" element={<Room />}></Route>
             </Routes>
           </BrowserRouter>
         </div>

@@ -37,17 +37,11 @@ const Rooms = () => {
         if(value.status == 100){
           alert("Something went wrong...",value.msg);
         }
-        else if(value.status == 200){
-          //navigate to the room tab and you can move ahead.... there.....
-          alert("Now to Navigate you to the room...");
+        else if(value.status == 200 || value.status == 201){
+          return navigate(`/room?roomToken=${address}`);
         }
       })
       .catch(error => console.log('error', error));
-
-
-
-
-    // return navigate(`room?roomToken=${roomToken}`);
   };
   useEffect(()=>{
     var myHeaders = new Headers();

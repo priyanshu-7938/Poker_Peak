@@ -1,7 +1,7 @@
 // import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Account, Dashboard, Tournament, AddMoney } from "../components";
-import { NoPage, Room } from "../pages";
+import { NoPage } from "../pages";
 import Navbar from "./HomeComponents/Navbar";
 import Sidebar from "./HomeComponents/Sidebar";
 import { fullScreenState } from "../atoms/triggers";
@@ -39,7 +39,6 @@ export default function Home() {
         <Routes>
           <Route path="account" element={<Account />} />
           <Route path="rooms" element={<Rooms />} />
-          <Route path="rooms/:roomToken" element={<Room />}></Route>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="tournament" element={<Tournament />} />
           <Route path="addMoney" element={<AddMoney />} />

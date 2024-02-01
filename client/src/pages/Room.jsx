@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // import { useSocketContext } from "../socketContext";
 // import { socket } from "../socket";
 // import useSocketSetupForRoom from "../socketUtils/useSocketSetupForRoom";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Fullscreen, Shrink } from "lucide-react";
 import PlayerCard from "@/components/game/PlayerCard";
@@ -11,6 +11,7 @@ import { fullScreenState } from "@/atoms/triggers";
 import useSocket from "@/hooks/useSocket";
 import Chats from "@/components/game/Chats";
 import { Toaster, toast } from "sonner";
+import { useAddress } from "@thirdweb-dev/react";
 
 export default function Room() {
   // const [message, setMessage] = useState("");
@@ -20,7 +21,8 @@ export default function Room() {
   const [loading, setLoading] = useState(true);
   const [FullScreenTrigger, setFullScreenTrigger] =
     useRecoilState(fullScreenState);
-
+  const userAddress = useAddress();
+  const navigate = useNavigate();
   const socket = useSocket();
 
   useEffect(() => {
@@ -38,8 +40,33 @@ export default function Room() {
   }, [socket]);
 
   const leaveRoom = () => {
+    if(!userAddress || !roomToken){
+      alert("Try again later...");
+      return;
+    }
     socket.emit("leaveRoom", { roomName: roomToken });
-    toast("You left the room !");
+    //doing stufff....
+    // the fetch onemptied.apply..
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("address", roomToken);
+    urlencoded.append("userAddress", userAddress);
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: 'follow'
+    };
+
+    fetch("http://localhost:2024/roomLeave", requestOptions)
+      .then(response => response.text())
+      .then(result => 
+        navigate("/home/rooms")  
+      )
+      .catch(error => console.log('error', error));
   };
   // const sendMessage = () => {
   //   emitMessage("helo");

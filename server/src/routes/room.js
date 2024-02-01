@@ -22,18 +22,25 @@ router.post("/roomJoin",async (req,res) => {
     // console.log(retur);
     switch(retur){
         case "isin":
-            res.json({"status":100,"msg":"allready existing account"});
+            res.json({"status":201,"msg":"allready existing account"});
             return;
         case "full":
             res.json({"status":100,"msg":"roomm is full."});
             return;
     }
     res.json({...retur, "status":200});
-    
-    // console.log(user);
-    res.end();
-    
 });
+router.post("/roomLeave",async (req,res) => {
+    console.log(req.body);
+    const contract = req.body.address;
+    const userAddresss = req.body.userAddress;
+    const room = await Room.findByAddressValue(contract);
+    const user = await User.findByAddressValue(userAddresss);
+    const retur = await room.removeUser(user._id);
+    res.json({...retur, "status":200});
+});
+
+
 
 
 export default router;
