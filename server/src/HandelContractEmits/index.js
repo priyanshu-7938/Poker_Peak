@@ -1,5 +1,5 @@
 import Room from "../models/room.js";
-
+import { decryptWithPrivateKey } from "../utils/cardDeck.js";
 
 const UserFoldedWithReason = async (data, io) => {
     //folding the user whith the given addres
@@ -40,19 +40,43 @@ const betCalled = async (data, io) => {
 
 }
 const deckPost = async (data, io) => {
-    
+    // (uint8 emitCode , uint256 indexed createdOn , address indexed createdBy , uint256 indexed nonce , string[] cards17);
+    const room = await Room.findByAddressValue(data.transaction.address);
+    room.encryptedGameDeck = data.data.cards17;
+    await room.save({validateBeforeSave:false});
+    io.emit("deckPost",{
+        "status":200,
+        "msg":"deck was posted.",
+    });
 }
 const pKeyExposed = async (data, io) => {
-
+    io.emit("pKeyExposed",{
+        "status":200,
+        "msg":"PkeyIsExposed",
+    });
 }
 const StateDiscloser = async (data, io) => {
-    
+    //uint8 emitCode , uint256 indexed createdOn , uint256 indexed nonce, GameState stateTransitationTo
+    const room = await Room.findByAddressValue(data.transaction.address);
+    room.status = data.data.stateTransitationTo;
+    await room.save({validateBeforeSave:false});
+    io.emit("StateDiscloser",{
+        "status":data.data.stateTransitationTo,
+        "msg":"Status was updated",
+    });
 }
 const RandomNumberGenerated = async (data, io) => {
-
+    //(uint8 emitCode , uint256 indexed createdOn ,address indexed createdBy ,  uint256 indexed nonce , uint256 randomNumber )
+    const room = await Room.findByAddressValue(data.transaction.address);
+    room.randomNumberGenerated = data.data.randomNumber;
+    await room.save({validateBeforeSave:false});
+    io.emit("RandomNumberGenerated",{
+        "status":200,
+        "msg":"Deck was poseted.",
+    });
 }
 const WithdrawalRequested = async (data, io) => {
-    
+    //widrawal.. request was emited...
 }
 
 /*

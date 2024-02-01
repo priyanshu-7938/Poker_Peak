@@ -64,7 +64,7 @@ const roomSchema = new mongoose.Schema(
 // instance method to encode the cards with the public key
 roomSchema.methods.getFirst3Cards = function() {
     if(this.status == 'firstloop' || this.status == 'secondloop' || this.stauts == 'thirdloop'){
-        return decryptWithPrivateKey( this.encryptedGameDeck, this.privateKey).slice(-5).slice(0,3);
+        return this.encryptedGameDeck.map((item) => decryptWithPrivateKey( item, this.privateKey)).slice(-5).slice(0,3);
     }
 };
 
@@ -75,6 +75,30 @@ roomSchema.statics.findByAddressValue = async (contrctAddress) => {
     }
     return room;
 };
+
+roomSchema.statics.getAllRooms = async function() {
+    const rooms = await this.find();
+    const sanitizedRooms = rooms.map(room => room.getSanitizedRoomInfo());
+    return sanitizedRooms;
+};
+
+roomSchema.methods.getSanitizedRoomInfo = function() {
+    const sanitizedRoom = {
+        _id: this._id,
+        status: this.status,
+        users: this.users.map(user => ({ id: user.id, isFolded: user.isFolded })),
+        pooledAmount: this.pooledAmount,
+        encryptedGameDeck: this.encryptedGameDeck,
+        memberCount: this.memberCount,
+        contrctAddress: this.contrctAddress,
+        sponcerAddress: this.sponcerAddress,
+        createdAt: this.createdAt,
+        updatedAt: this.updatedAt,
+    };
+
+    return sanitizedRoom;
+};
+
 
 roomSchema.method.foldUserByAddress = async function(foldAddress){
     // changing the status of the user to fold for specific user../
@@ -88,19 +112,21 @@ roomSchema.method.foldUserByAddress = async function(foldAddress){
         }
         return item;
     });
-    room.users = updatedusers;
+    room.users = updatedUsers;
     await room.save({validateBeforeSave:false});
 }
 
 roomSchema.methods.getFirst4Cards = function() {
     if( this.status == 'secondloop' || this.stauts == 'thirdloop'){
-        return decryptWithPrivateKey( this.encryptedGameDeck, this.privateKey).slice(-5).slice(0,4);
+        return this.encryptedGameDeck.map((item) => decryptWithPrivateKey( item, this.privateKey)).slice(-5).slice(0,4);
+        // return decryptWithPrivateKey( this.encryptedGameDeck, this.privateKey).slice(-5).slice(0,4);
     }
 };
 
 roomSchema.methods.getFirst5Cards = function() {
     if( this.stauts == 'thirdloop' || this.status == 'ended' ){
-        return decryptWithPrivateKey( this.encryptedGameDeck, this.privateKey).slice(-5);
+        return this.encryptedGameDeck.map((item) => decryptWithPrivateKey( item, this.privateKey)).slice(-5);
+        // return decryptWithPrivateKey( this.encryptedGameDeck, this.privateKey).slice(-5);
     }
 };
 
@@ -126,17 +152,22 @@ roomSchema.methods.updatePooledAmounnt = async function(pooledAmount) {
 // instance method to add a user to the room
 roomSchema.methods.addUser = async function(userId) {
     const room = this;
+    if(room.users.length >= 6){return "full";}
     const users = this.users;
-    users.forEach((item)=>{
-        if(item.id == userId){
-            // user allready existsSync...
-        }
-    })
+    console.log(userId, userId.toString());
+    console.log(room.users[0]);
     for(var el in users){
-        if(el?.id == userId){
-            return false;
+        // console.log("state:",users[el].id.toString() ===  userId.toString());
+        if(users[el].id.toString() === userId.toString()){
+            console.log("userAllreadyexist::");
+            return "isin";
         }
     }
+    // for(var el in users){
+    //     if(el?.id == userId){
+    //         return false;
+    //     }
+    // }
     //else the user is not present..
     users.push({id:userId,isFolded:false});
     await room.save({validateBeforeSave:false});
@@ -191,6 +222,6 @@ roomSchema.pre('save', async function (next) {
 });
 
 
-const /Room = mongoose.model('Room', roomSchema);
+const Room = mongoose.model('Room', roomSchema);
 
 export default Room;
