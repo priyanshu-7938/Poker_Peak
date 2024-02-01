@@ -60,10 +60,12 @@ export default function Login() {
         setUserData(parsedResult?.data);
         localStorage.setItem("token", parsedResult?.data.token);
         Navigate("/home/dashboard");
+        setLoad(false);
       } else {
-        console.log(result);
+        message.info(parsedResult.message);
       }
     } catch (error) {
+      message.error(error.result.message);
       console.log("error", error);
     } finally {
       setTimeout(() => {

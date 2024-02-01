@@ -1,81 +1,80 @@
-import mongoose from 'mongoose';
-import validator from 'validator';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
 
 const userSchema = new mongoose.Schema(
   {
     name: {
-        type: String,
-        required: [true, 'Please provide your name'],
+      type: String,
+      required: [true, "Please provide your name"]
     },
     address: {
       type: String,
-      required: [true, 'must have a name'],
+      required: [true, "must have a name"],
       trim: true,
-      unique: true,
+      unique: true
     },
     token: {
-        type: String,
-        required: [true, 'must have a name'],
+      type: String,
+      required: [true, "must have a name"]
     },
     email: {
-        type: String,
-        unique: true,
-        required: [true, 'must have a email'],
-        trim: true,
-        lowercase: true,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-            throw new Error('Enter valid email');
-            }
-        },
+      type: String,
+      unique: true,
+      required: [true, "must have a email"],
+      trim: true,
+      lowercase: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Enter valid email");
+        }
+      }
     },
     password: {
       type: String,
-      required: [true, 'must have a name'],
+      required: [true, "must have a name"],
       trim: true,
       validate(value) {
         if (value.length < 7) {
-          throw new Error('Password should be greater than 6 digit');
+          throw new Error("Password should be greater than 6 digit");
         }
-      },
+      }
     },
     pooledMoney: {
       type: String,
-      default: "0",
+      default: "0"
     },
     avatar: {
       type: String,
-      default: "https://avataaars.io/",
+      default: "https://avataaars.io/"
     },
     admin: {
       type: Boolean,
-      default: false,
+      default: false
     },
     verified: {
       type: Boolean,
-      default: false,
+      default: false
     },
     kyc: {
-        type: Boolean,
-        default: false,
-      },
+      type: Boolean,
+      default: false
+    },
     otp: {
       type: String,
-      default: '',
+      default: ""
     },
     phoneNo: {
-      type: String,
+      type: String
     },
     phrase: {
-      type: String,
-    },
+      type: String
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 
@@ -83,7 +82,7 @@ userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const tok = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
   user.token = tok;
-  await user.save({validataBeforeSave:false});
+  await user.save({ validataBeforeSave: false });
   return tok;
 };
 
@@ -99,46 +98,67 @@ userSchema.methods.toJSON = function () {
 };
 
 userSchema.statics.findByAddress = async (address, password) => {
-  const user = await User.findOne({ address });
-  if (!user) {
-    throw new Error('Unable to Login');
+  try {
+    const user = await User.findOne({ address });
+    if (!user) {
+      throw new Error("Unable to Login");
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new Error("Unable to Login");
+    }
+    return user;
+  } catch (err) {
+    return;
   }
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw new Error('Unable to Login');
-  }
-  return user;  
 };
 
 userSchema.statics.findById = async (_id) => {
+  try {
     const user = await User.findOne({ _id });
     if (!user) {
-      throw new Error('Unable to Login');
+      throw new Error("Unable to Login");
     }
     return user;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
 };
 
 userSchema.statics.findByAddressValue = async (address) => {
-  const user = await User.findOne({ address });
-  if (!user) {
-    throw new Error('Unable to fetch user for the game room.');
+  try {
+    const user = await User.findOne({ address });
+    if (!user) {
+      throw new Error("Unable to fetch user for the game room.");
+    }
+    return user;  
+  } catch (err) {
+    console.log(err);
+    return;
   }
-  return user;
+  
 };
 
-userSchema.statics.validateToken = async ( token, _id ) => {
-  const user = await User.findOne({_id});
-  return token == user?.token;
+userSchema.statics.validateToken = async (token, _id) => {
+  try {
+    const user = await User.findOne({ _id });
+    return token == user?.token;  
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+  
 };
 
-userSchema.pre('save', async function (next) {
+userSchema.pre("save", async function (next) {
   const user = this;
-  if (user.isModified('password')) {
+  if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   next();
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

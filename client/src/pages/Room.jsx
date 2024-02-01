@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // import { useSocketContext } from "../socketContext";
 // import { socket } from "../socket";
 // import useSocketSetupForRoom from "../socketUtils/useSocketSetupForRoom";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Fullscreen, Shrink } from "lucide-react";
 import PlayerCard from "@/components/game/PlayerCard";
@@ -17,7 +17,7 @@ export default function Room() {
   // const [message, setMessage] = useState("");
   // const { emitMessage } = useSocketContext();
   const [params] = useSearchParams();
-  const [ players, setPlayers ] = useState();
+  const [players, setPlayers] = useState();
   const roomToken = params.get("roomToken");
   const [loading, setLoading] = useState(true);
   const [FullScreenTrigger, setFullScreenTrigger] =
@@ -31,17 +31,14 @@ export default function Room() {
 
     socket.emit("message", (msg) => {
       console.log(`New message received: ${msg}`);
-      
     });
 
     setTimeout(() => {
       setLoading(false);
     }, 2000);
-
   }, [socket]);
 
-  useEffect(()=>{
-
+  useEffect(() => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -49,30 +46,31 @@ export default function Room() {
     urlencoded.append("address", roomToken);
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: urlencoded,
-      redirect: 'follow'
+      redirect: "follow"
     };
 
     fetch("http://localhost:2024/fetchUsers", requestOptions)
-      .then(response => response.text())
-      .then(result => {
+      .then((response) => response.text())
+      .then((result) => {
         setPlayers(JSON.parse(result));
       })
-      .catch(error => console.log('error', error));
+      .catch((error) => console.log("error", error));
+  }, []);
 
-  },[]);
-
-  useEffect(()=>{console.log(players);},[players])
+  useEffect(() => {
+    console.log(players);
+  }, [players]);
 
   const leaveRoom = () => {
-    if(!userAddress || !roomToken){
+    if (!userAddress || !roomToken) {
       alert("Try again later...");
       return;
     }
     socket.emit("leaveRoom", { roomName: roomToken });
-    
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -81,18 +79,16 @@ export default function Room() {
     urlencoded.append("userAddress", userAddress);
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: urlencoded,
-      redirect: 'follow'
+      redirect: "follow"
     };
 
     fetch("http://localhost:2024/roomLeave", requestOptions)
-      .then(response => response.text())
-      .then(result => 
-        navigate("/home/rooms")  
-      )
-      .catch(error => console.log('error', error));
+      .then((response) => response.text())
+      .then((result) => navigate("/home/rooms"))
+      .catch((error) => console.log("error", error));
   };
   // const sendMessage = () => {
   //   emitMessage("helo");
@@ -100,12 +96,16 @@ export default function Room() {
   // };
   // useSocketSetupForRoom();
 
+  console.log('players : ', players);
+
   if (loading) {
-    return <img
-      src='/assets/spinner.svg'
-      className='m-auto bg-black'
-      alt='loading....'
-    />
+    return (
+      <img
+        src="/assets/spinner.svg"
+        className="m-auto bg-black"
+        alt="loading...."
+      />
+    );
   }
 
   if (!roomToken) {
@@ -129,7 +129,7 @@ export default function Room() {
     <main className="w-full h-[100vh] bg-gradient-to-tr from-[#8b0000c7] via-[#580101] to-[#8B0000]  rounded-md">
       <Toaster />
       {/* Chat Application */}
-      <div className='absolute bottom-2 right-2 z-10'>
+      <div className="absolute bottom-2 right-2 z-10">
         <Chats roomName={roomToken} />
       </div>
       {/* Container */}
@@ -155,7 +155,8 @@ export default function Room() {
             )}
           </Button>
           <div className="flex flex-col gap-2">
-            <h3 className="text-xl font-medium">Players : {"3/6"}</h3>
+            <h3 className="text-xl font-medium">Players :
+              {" "+players.length}/6</h3>
             <Button
               onClick={leaveRoom}
               variant={"secondary"}
@@ -178,24 +179,25 @@ export default function Room() {
             className="absolute w-full h-[73%]
             -bottom-8 flex items-end  space-x-10"
           >
-            {players && players.map((player, index) => (
-              <div
-                key={index}
-                className={`w-1/2 md:w-1/6 lg:w-1/6 p-2 ${`${
-                  index === 0
-                    ? "absolute  top-0 left-4"
-                    : index === 4
-                    ? "absolute top-0 right-3"
-                    : index === 3
-                    ? "relative left-[20%] "
-                    : index === 5
-                    ? "absolute left-[40%] mb-[40px] border rounded-md border-black"
-                    : ""
-                }`}`}
-              >
-                <PlayerCard {...player} />
-              </div>
-            ))}
+            {players &&
+              players.map((player, index) => (
+                <div
+                  key={index}
+                  className={`w-1/2 md:w-1/6 lg:w-1/6 p-2 ${`${
+                    index === 0
+                      ? "absolute  top-0 left-4"
+                      : index === 4
+                      ? "absolute top-0 right-3"
+                      : index === 3
+                      ? "relative left-[20%] "
+                      : index === 5
+                      ? "absolute left-[40%] mb-[40px] border rounded-md border-black"
+                      : ""
+                  }`}`}
+                >
+                  <PlayerCard {...player} />
+                </div>
+              ))}
           </div>
         </div>
         {/* Buttons */}
@@ -219,7 +221,7 @@ export default function Room() {
             Raise
           </Button>
         </div>
-        <p>new player joining....</p>
+        <p>{"player 1 turn"}</p>
       </div>
     </main>
   );
