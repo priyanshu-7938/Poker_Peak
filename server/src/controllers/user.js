@@ -28,10 +28,16 @@ const handelLoginForUser = async (req,res)=>{
     const data = req.body;
     try{
         if(data?.password && data?.address ){
-            let user = await User.findByAddress(data.address,data.password);
-            if(!user){
-                throw new Error("User not found");
+            let user = await User.findByAddress(data.address,data.password);            
+
+            if (!user || user === null) {
+                console.log("User not found");
+                return res.status(404).json({
+                    status:"unsuccesfull",
+                    message:"Login Failed"
+                })
             }
+            
             let token = await user.generateAuthToken();
 
             const loggedInUser=await User.findById(user._id);
@@ -49,12 +55,15 @@ const handelLoginForUser = async (req,res)=>{
                 data:{
                     token,userInfo:obj
                 },
-                message:"Succesfull Login"
+                message:"Succesfull LoggedIn"
             })
             
         }
     }
-    catch(e){console.log(e);}
+    catch (e) {
+        console.log('sdfsdf');
+        return e;
+    }
 }
 
 export {

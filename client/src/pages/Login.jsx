@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress, useConnectionStatus } from "@thirdweb-dev/react";
 import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains";
 import { message } from "react-message-popup";
 
@@ -11,6 +11,7 @@ import { Navigate } from 'react-router-dom';
 export default function Login() {
   const address = useAddress();
   const navigate = useNavigate();
+  const connectionStatus = useConnectionStatus();
 
   const { setUserData } = useTheContext();
   const token = localStorage.getItem("token");
@@ -59,10 +60,12 @@ export default function Login() {
         setUserData(parsedResult?.data);
         localStorage.setItem("token", parsedResult?.data.token);
         Navigate("/home/dashboard");
+        setLoad(false);
       } else {
-        console.log(result);
+        message.info(parsedResult.message);
       }
     } catch (error) {
+      message.error(error.result.message);
       console.log("error", error);
     } finally {
       setTimeout(() => {
@@ -71,7 +74,7 @@ export default function Login() {
     }
   };
 
-  if (token) {
+  if (token && connectionStatus === 'connected') {
     return <Navigate to="/home/dashboard" />;
   }
 
@@ -90,7 +93,7 @@ export default function Login() {
                 }}
                 theme="light"
               />
-              {address && (
+              {token === null && (
                 <>
                   <p className="text-2xl  font-goudy font-bold">Password</p>
                   <input

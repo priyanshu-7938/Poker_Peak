@@ -1,5 +1,5 @@
 // import { useEffect } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { Account, Dashboard, Tournament, AddMoney } from "../components";
 import { NoPage } from "../pages";
 import Navbar from "./HomeComponents/Navbar";
@@ -10,15 +10,22 @@ import { useRecoilValue } from "recoil";
 // import { useAddress } from "@thirdweb-dev/react";
 import { message } from "react-message-popup";
 import Rooms from "./Rooms";
+import { useConnectionStatus } from "@thirdweb-dev/react";
 
 export default function Home() {
   // const address = useAddress();
   const token = localStorage.getItem("token");
   const FullScreenTrigger = useRecoilValue(fullScreenState);
+  const navigate = useNavigate();
 
-  if (token == undefined || token == null) {
+  const connectionStatus = useConnectionStatus();
+
+  console.log('connecstatus : ', connectionStatus);
+
+  if (token == undefined || token == null || connectionStatus === 'disconnected') {
     message.info("Session Expired!", 1000);
-    return <Navigate to="/login" />;
+    navigate('/login');
+    return;
   }
 
   if (FullScreenTrigger) {
