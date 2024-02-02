@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // import { useSocketContext } from "../socketContext";
 // import { socket } from "../socket";
 // import useSocketSetupForRoom from "../socketUtils/useSocketSetupForRoom";
-import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Fullscreen, Shrink } from "lucide-react";
 import PlayerCard from "@/components/game/PlayerCard";
@@ -143,6 +143,7 @@ export default function Room() {
     }
     socket.emit("leaveRoom", { roomName: roomToken });
 
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -152,8 +153,10 @@ export default function Room() {
 
     var requestOptions = {
       method: "POST",
+      method: "POST",
       headers: myHeaders,
       body: urlencoded,
+      redirect: "follow"
       redirect: "follow"
     };
 
