@@ -183,6 +183,14 @@ roomSchema.methods.addUser = async function(userId) {
     //else the user is not present..
     users.push({id:userId,isFolded:false});
     await room.save({validateBeforeSave:false});
+    //checking if the room is... fill.. k then the game will start...
+    if(users.length == 6){
+        if(this.status === "resting"){
+            //meaning the game is ready to start....
+            // calling game init...
+            this.initGame();
+        }
+    }
     return users;
 };
 // instance method to remove a user from the room
@@ -214,6 +222,8 @@ roomSchema.methods.initGame = function() {
     const randomDeck = getARandomDeck();
     
     this.encryptedDeck = randomDeck.map((element,index) => encryptWithPublicKey(element, this.publicKey));
+    this.save({validateBeforeSave:false});//
+    // calling the contract for init game...
 }
 
 roomSchema.pre('validate', function(next) {

@@ -31,7 +31,7 @@ const betCalled = async (data, io) => {
     const room = await Room.findByAddressValue(data.transaction.address);
     await room.updatePooledAmounnt(data.data.currentPot);
 
-    io.emit("betRaised",{
+    io.emit("betCalled",{
         currentBet:data.data.raisedTo,
         currentPool:data.data.currentPot,
         expectedUser: data.data.nextUser,

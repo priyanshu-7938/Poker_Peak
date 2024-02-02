@@ -17,16 +17,87 @@ export default function Room() {
   // const [message, setMessage] = useState("");
   // const { emitMessage } = useSocketContext();
   const [params] = useSearchParams();
-  const [ players, setPlayers ] = useState();
   const roomToken = params.get("roomToken");
   const [loading, setLoading] = useState(true);
   const [FullScreenTrigger, setFullScreenTrigger] =
-    useRecoilState(fullScreenState);
+  useRecoilState(fullScreenState);
   const userAddress = useAddress();
   const navigate = useNavigate();
   const socket = useSocket();
 
+  //game Status mainntaining...
+  const [ theExpectedPlayer, setExpectedPlayer] = useState();
+  const [ players, setPlayers ] = useState();
+
   useEffect(() => {
+
+    socket.on("testingEvent",()=>{
+      alert("i got the event Baby....");
+    });
+
+    // io.emit("UserFoldedWithReason",{
+    //     reason: data.data.reason,
+    //     addressToFOld: data.data.foldAddress,
+    //     users: room.users,
+    // });
+    socket.on("testingEvent",()=>{
+      //do some stuff here...
+    });
+
+    // io.emit("betRaised",{
+    //     currentBet:data.data.raisedTo,
+    //     currentPool:data.data.currentPot,
+    //     expectedUser: data.data.nextUser,
+    //     raisedByAddress:raiserAddress,
+    // })
+    socket.on("betRaised",()=>{
+      //do some releted stuff..
+    });
+
+    //io.emit("betCalled",{
+    //     currentBet:data.data.raisedTo,
+    //     currentPool:data.data.currentPot,
+    //     expectedUser: data.data.nextUser,
+    //     raisedByAddress:raiserAddress,
+    // })
+    socket.on("betCalled",()=>{
+      // do the stuff here....
+    });
+
+    //io.emit("deckPost",{
+    //  "status":200,
+    //  "msg":"deck was posted.",
+    //});
+    socket.on("deckPost",()=>{
+      //do some stuff here also....
+    });
+
+    // io.emit("pKeyExposed",{
+    //   "status":200,
+    //   "msg":"PkeyIsExposed",
+    // });
+    socket.on("pKeyExposed",()=>{
+      // do some stuff here toooo..
+    });
+
+    // io.emit("StateDiscloser",{
+    //   "status":data.data.stateTransitationTo,
+    //   "msg":"Status was updated",
+    // });
+    socket.on("StateDiscloser",()=>{
+      //do some stuff here..
+    });
+
+    // io.emit("RandomNumberGenerated",{
+    //   "status":200,
+    //   "msg":"Deck was poseted.",
+    // });
+    socket.on("RandomNumberGenerated",()=>{
+      // do some stuff here too...
+    });
+
+
+
     socket.emit("joinRoom", { roomName: roomToken });
 
     socket.emit("message", (msg) => {
@@ -41,7 +112,12 @@ export default function Room() {
   }, [socket]);
 
   useEffect(()=>{
+    fetchTHeUsers();
+  },[]);
 
+  useEffect(()=>{console.log(players);},[players])
+
+  const fetchTHeUsers = () => { 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -61,11 +137,7 @@ export default function Room() {
         setPlayers(JSON.parse(result));
       })
       .catch(error => console.log('error', error));
-
-  },[]);
-
-  useEffect(()=>{console.log(players);},[players])
-
+  } 
   const leaveRoom = () => {
     if(!userAddress || !roomToken){
       alert("Try again later...");
@@ -115,15 +187,6 @@ export default function Room() {
   const fullScreenHandler = () => {
     setFullScreenTrigger((prev) => !prev);
   };
-
-  // const players = [
-  //   { name: "Player 1", balance: 2029, bet: 19 },
-  //   { name: "Player 2", balance: 1500, bet: 15 },
-  //   { name: "Player 3", balance: 2500, bet: 20 },
-  //   { name: "Player 4", balance: 1200, bet: 12 },
-  //   { name: "Player 5", balance: 1100, bet: 10 },
-  //   { name: "Player 6", balance: 100, bet: 100 }
-  // ];
 
   return (
     <main className="w-full h-[100vh] bg-gradient-to-tr from-[#8b0000c7] via-[#580101] to-[#8B0000]  rounded-md">

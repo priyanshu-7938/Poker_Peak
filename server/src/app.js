@@ -105,4 +105,16 @@ contract.events.addEventListener("StateDiscloser", (event) => StateDiscloser(eve
 contract.events.addEventListener("RandomNumberGenerated", (event) => RandomNumberGenerated(event,io));
 contract.events.addEventListener("WithdrawalRequested", (event) => WithdrawalRequested(event,io));
 
+
+const contract2 = await sdk.getContract("0x98a1fc6974Fa4F278B4C9973fE08d9e4eF375DEc");
+contract2.events.addEventListener("eventName",(event)=>testingEvent(event,io));
+
+// const testingEvent = (event,io) => {
+//   console.log("this text is important to show up...");
+//   io.emit("testingEvent",{
+//     "msg":"Status was updated",
+//     ...event
+// });
+// }
+
 export default httpServer;

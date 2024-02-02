@@ -31,12 +31,20 @@ router.post("/roomJoin",async (req,res) => {
     res.json({...retur, "status":200});
 });
 router.post("/roomLeave",async (req,res) => {
+    //if the room in not the state of resting then jus fold the user instead of removing it.....
     console.log(req.body);
     const contract = req.body.address;
     const userAddresss = req.body.userAddress;
     const room = await Room.findByAddressValue(contract);
     const user = await User.findByAddressValue(userAddresss);
-    const retur = await room.removeUser(user._id);
+    let retur;
+    if(room.status !== "resting" ){
+        ///meaing jus fold the user via the id...
+        retur = await room.foldUserByAddress(userAddresss);
+    }
+    else{
+        retur = await room.removeUser(user._id);
+    }
     res.json({...retur, "status":200});
 });
 
