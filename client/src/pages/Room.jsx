@@ -21,37 +21,39 @@ export default function Room() {
   const roomToken = params.get("roomToken");
   const [loading, setLoading] = useState(true);
   const [FullScreenTrigger, setFullScreenTrigger] =
-  useRecoilState(fullScreenState);
+    useRecoilState(fullScreenState);
   const userAddress = useAddress();
   const navigate = useNavigate();
   const socket = useSocket();
 
   //game Status mainntaining...
-  const [ stateOfGame, setStateOfGame] = useState("resting");
-  const [ theCurrentBet, setTheCurrentBet ] = useState(0);
-  const [ theUserCards, setTheUserCards ] = useState();
-  const [ theTabelCards, setTheTabelCards ] = useState();
-  const [ thePoolAmount, setThePoolAmount ] = useState(0);
-  const [ theExpectedPlayer, setExpectedPlayer] = useState();
-  const [ players, setPlayers ] = useState();
+  const [stateOfGame, setStateOfGame] = useState("resting");
+  const [theCurrentBet, setTheCurrentBet] = useState(0);
+  const [theUserCards, setTheUserCards] = useState();
+  const [theTabelCards, setTheTabelCards] = useState();
+  const [thePoolAmount, setThePoolAmount] = useState(0);
+  const [theExpectedPlayer, setExpectedPlayer] = useState();
+  const [players, setPlayers] = useState();
+
+  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+
 
   useEffect(() => {
-
-    socket.on("testingEvent",()=>{
+    socket.on("testingEvent", () => {
       alert("i got the event Baby....");
     });
 
-    socket.on("update",()=>{
+    socket.on("update", () => {
       fetchTHeUsers();
-    })
+    });
 
     // io.emit("UserFoldedWithReason",{
     //     reason: data.data.reason,
     //     addressToFOld: data.data.foldAddress,
     //     users: room.users,
     // });
-    socket.on("UserFoldedWithReason",(data)=>{
-      message.info(data.addressToFOld+" folded,Reason:"+data.reason,2000);
+    socket.on("UserFoldedWithReason", (data) => {
+      message.info(data.addressToFOld + " folded,Reason:" + data.reason, 2000);
       fetchTHeUsers();
     });
 
@@ -61,11 +63,11 @@ export default function Room() {
     //     expectedUser: data.data.nextUser,
     //     raisedByAddress:raiserAddress,
     // })
-    socket.on("betRaised",(data)=>{
+    socket.on("betRaised", (data) => {
       setTheCurrentBet(data.currentBet);
       setThePoolAmount(data.currentPool);
       setExpectedPlayer(data.expectedUser);
-      message.info("The bet was raised to  "+data.currentBet+"$!",3000);
+      message.info("The bet was raised to  " + data.currentBet + "$!", 3000);
     });
 
     //io.emit("betCalled",{
@@ -74,26 +76,26 @@ export default function Room() {
     //     expectedUser: data.data.nextUser,
     //     raisedByAddress:raiserAddress,
     // })
-    socket.on("betCalled",(data)=>{
+    socket.on("betCalled", (data) => {
       setThePoolAmount(data.currentPool);
       setExpectedPlayer(data.expectedUser);
       setTheCurrentBet(data.currentBet);
-      message.info("The Bet was Called",2000);
+      message.info("The Bet was Called", 2000);
     });
 
     //io.emit("deckPost",{
     //  "status":200,
     //  "msg":"deck was posted.",
     //});
-    socket.on("deckPost",()=>{
-      message.info("The deck is distributed..!!",500);
+    socket.on("deckPost", () => {
+      message.info("The deck is distributed..!!", 500);
     });
 
     // io.emit("pKeyExposed",{
     //   "status":200,
     //   "msg":"PkeyIsExposed",
     // });
-    socket.on("pKeyExposed",()=>{
+    socket.on("pKeyExposed", () => {
       message.info("The pivate Key is Posted on contract!");
     });
 
@@ -101,7 +103,7 @@ export default function Room() {
     //   "status":data.data.stateTransitationTo,
     //   "msg":"Status was updated",
     // });
-    socket.on("StateDiscloser",(data)=>{
+    socket.on("StateDiscloser", (data) => {
       //run the cards fetcher...
       fetchTheUserCards();
       setStateOfGame(data.status);
@@ -111,11 +113,9 @@ export default function Room() {
     //   "status":200,
     //   "msg":"Deck was poseted.",
     // });
-    socket.on("RandomNumberGenerated",()=>{
+    socket.on("RandomNumberGenerated", () => {
       // do some stuff here too...
     });
-
-
 
     socket.emit("joinRoom", { roomName: roomToken });
 
@@ -128,25 +128,40 @@ export default function Room() {
     }, 2000);
   }, [socket]);
 
-  useEffect(()=>{
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenHeight(window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     //TODO: add fetchRoomState....
 
     fetchTHeUsers();
     fetchTheUserCards();
     fetchTheTabelCards();
-  },[]);
-  useEffect(()=>{
+  }, []);
+  useEffect(() => {
     // ['resting','firstloop','secondloop','thirdloop','ended'],
-    if(stateOfGame === "resting")return;
+    if (stateOfGame === "resting") return;
     fetchTheTabelCards();
-    
-  },[stateOfGame]);
+  }, [stateOfGame]);
 
-  useEffect(()=>{console.log(players);},[players])
+  useEffect(() => {
+    console.log(players);
+  }, [players]);
 
   const fetchTheUserCards = () => {
-    if(!userAddress){return;}
-    if(stateOfGame === "resting"){
+    if (!userAddress) {
+      return;
+    }
+    if (stateOfGame === "resting") {
       console.log("cant fetch Cards ,game not started yet...");
       return;
     }
@@ -158,17 +173,17 @@ export default function Room() {
     urlencoded.append("userAddress", userAddress);
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: urlencoded,
-      redirect: 'follow'
+      redirect: "follow"
     };
 
     fetch("http://localhost:2024/fetchCards", requestOptions)
-      .then(response => response.text())
-      .then(result => setTheUserCards(JSON.parse(result).cards))
-      .catch(error => console.log('error', error));
-  }
+      .then((response) => response.text())
+      .then((result) => setTheUserCards(JSON.parse(result).cards))
+      .catch((error) => console.log("error", error));
+  };
   const fetchTheTabelCards = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -177,22 +192,22 @@ export default function Room() {
     urlencoded.append("address", roomToken);
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: urlencoded,
-      redirect: 'follow'
+      redirect: "follow"
     };
 
     fetch("http://localhost:2024/fetchTabelCards", requestOptions)
-      .then(response => response.text())
-      .then(result => {
+      .then((response) => response.text())
+      .then((result) => {
         const res = JSON.parse(result);
-        if(res.status === 100)return;
+        if (res.status === 100) return;
         setTheTabelCards(res.cards);
       })
-      .catch(error => console.log('error', error));
-  }
-  const fetchTHeUsers = () => { 
+      .catch((error) => console.log("error", error));
+  };
+  const fetchTHeUsers = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -211,15 +226,14 @@ export default function Room() {
       .then((result) => {
         setPlayers(JSON.parse(result));
       })
-      .catch(error => console.log('error', error));
-  } 
+      .catch((error) => console.log("error", error));
+  };
   const leaveRoom = () => {
     if (!userAddress || !roomToken) {
       alert("Try again later...");
       return;
     }
     socket.emit("leaveRoom", { roomName: roomToken });
-
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -246,7 +260,7 @@ export default function Room() {
   // };
   // useSocketSetupForRoom();
 
-  console.log('players : ', players);
+  console.log("players : ", players);
 
   if (loading) {
     return (
@@ -296,8 +310,9 @@ export default function Room() {
             )}
           </Button>
           <div className="flex flex-col gap-2">
-            <h3 className="text-xl font-medium">Players :
-              {players && " "+players.length}/6</h3>
+            <h3 className="text-xl font-medium">
+              Players :{players && " " + players.length}/6
+            </h3>
             <Button
               onClick={leaveRoom}
               variant={"secondary"}
@@ -309,15 +324,15 @@ export default function Room() {
           </div>
         </div>
         {/* Table Image Div */}
-        <div className="flex flex-wrap relative w-full m-auto max-w-[1100px]">
-          <img className="w-full" src={"/assets/table-nobg.svg"} alt="table" />
+        <div className={`flex flex-wrap relative w-full max-h-max m-auto max-w-[1100px] ${screenHeight < 800 && 'h-[470px] mb-10' }`}>
+          <img className="w-full h-full" src={"/assets/table-nobg.svg"} alt="table" />
           <div className="absolute top-[20%] left-[45%] flex flex-col items-center gap-2">
             <img src="/assets/pot.svg" alt="pot" className="max-w-[75px]" />
             <h2 className="font-bold text-white text-[2.4rem]">$9023</h2>
           </div>
           {/* players */}
           <div
-            className="absolute w-full h-[73%]
+            className="absolute w-full h-[73%] 
             -bottom-8 flex items-end  space-x-10"
           >
             {players &&
@@ -342,7 +357,7 @@ export default function Room() {
           </div>
         </div>
         {/* Buttons */}
-        <div className="flex self-center items-center space-x-3 pb-4">
+        <div className={`flex self-center items-center space-x-3 pb-4 ${screenHeight < 800 && 'pb-0' }`}>
           <Button
             size="lg"
             className="px-14 border border-black text-gray-900 rounded-full bg-red-500 "

@@ -1,22 +1,71 @@
 // import React from "react";
+import { useAddress } from "@thirdweb-dev/react";
 import { DollarSign } from "lucide-react";
 import { Coins } from "lucide-react";
+import { useEffect, useState } from "react";
 
 //todo :fetch the account balanve of userd form the blockchain...
-const OtherPlayers = ({ name, address, avatar, isFolded, cards }) => {
+const OtherPlayers = ({
+  name,
+  address,
+  avatar,
+  isFolded,
+  cards = ["2_s", "J_s"]
+}) => {
   console.log("THe use of user cards.. here...");
   //TODO: make sure you addd the cards when the address of the userAddress matches..
+
+  const currentAddress = useAddress();
+  const [cardImages, setCardImages] = useState();
+
+  const currentUser = address === currentAddress;
+
+  console.log("currentUser : ", currentUser);
+
+  useEffect(() => {
+    if (cards && Array.isArray(cards) && cards.length > 0) {
+      console.log("cards : ", cards);
+      const newCardImages = cards.map(
+        (cardCode) => `/assets/cards/${cardCode}.png`
+      );
+      setCardImages(newCardImages);
+    }
+  }, []);
+
   return (
-    <div className={`relative max-w-[175px] max-h-[180px] z-0 py-2 px-4 ${isFolded?" backdrop-filter grayscale":""}`}>
+    <div
+      className={`relative max-w-[175px] max-h-[180px] z-0 py-2 px-4 ${
+        isFolded ? " backdrop-filter grayscale" :
+        currentUser && 'max-w-[190px] border rounded-md border-gray-400 max-h-max '
+      }`}
+    >
       {/* for blurry effect */}
       <div className="absolute inset-0 w-full h-full -z-10 backdrop-blr-sm"></div>{" "}
       {/* Added "top-0 left-0" to position the blurred div behind the main content */}
       <main className="flex flex-col z-10 items-center">
-        <img
-          className="w-1/2"
-          src={avatar}
-          alt="pairofcards"
-        />
+        {/* absolute image container */}
+        {currentUser ? (
+          <div className="absolute xl:-top-14 -top-8 flex -space-x-10">
+            {cardImages &&
+              cardImages.map((imagePath, index) => (
+                <img
+                  key={index}
+                  className="w-20 xl:w-24"
+                  src={imagePath}
+                  alt={`Card ${index + 1}`}
+                />
+              ))}
+          </div>
+        ) : (
+          <div className="absolute top-10 left-14 xl:left-14">
+            <img
+              src={"/assets/pairofcards.png"}
+              className="w-12 xl:w-14"
+              alt={`pair of cards`}
+            />
+          </div>
+        )}
+        <img className="w-1/2" src={avatar} alt="pairofcards" />
         <div className="w-full  py-1 font-semibold text-center rounded-md ">
           <p className="text-xl">{name}</p>
           <p className="text.md truncate bg-[#c197c8] p-1 rounded">{address}</p>

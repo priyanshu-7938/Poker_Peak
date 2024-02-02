@@ -80,11 +80,6 @@ io.on("connection", (socket) => {
   });
 });
 
-
-
-
-
-
 //listeners on the contract.... goes here.....
 
 
