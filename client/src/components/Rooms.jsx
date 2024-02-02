@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { useAddress } from "@thirdweb-dev/react";
+import { message } from "react-message-popup";
 
 // import { Button } from "./ui/button";
 
@@ -37,12 +38,16 @@ const Rooms = () => {
       .then((result) => {
         const value = JSON.parse(result);
         if (value.status == 100) {
-          alert("Something went wrong...", value.msg);
+          message.error(value.msg);
         } else if (value.status == 200 || value.status == 201) {
           return navigate(`/room?roomToken=${address}`);
+        } else {
+          throw Error('Server error! Please check your network.');
         }
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => 
+        message.error(String(error))
+      );
   };
   useEffect(() => {
     var myHeaders = new Headers();
