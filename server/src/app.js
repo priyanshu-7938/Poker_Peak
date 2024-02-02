@@ -117,4 +117,4 @@ contract2.events.addEventListener("eventName",(event)=>testingEvent(event,io));
 // });
 // }
 
-export default httpServer;
+export { httpServer, io};

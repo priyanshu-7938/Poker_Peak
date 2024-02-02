@@ -142,12 +142,28 @@ roomSchema.methods.getFirst5Cards = function() {
     }
 };
 
-roomSchema.methods.getUserCardsVisId = function(userId) {
-    const room = Room.findById(_id);
-    const users = room.users;
-
-//yet to be done...
+roomSchema.methods.getUserCardsVisId = async function(_id){
+    // const userId = await User.findById(_id);
+    //apply condition  of game state...
+    if(this.state === "resting"){return;}
+    const users = this.users;
+    let indexOfUser = -1;
+    for(var i in users){
+        if(users[i].id.toString() === _id.toString()){
+            indexOfUser = i;
+            break;
+        }
+    }
     
+    
+    if(indexOfUser == -1){console.log("InTheCardFetch:userNotPresent");return;}
+
+    const first = await this.encryptedGameDeck[2*indexOfUser];
+    const second = await this.encryptedGameDeck[2*indexOfUser + 1];
+    console.log(first, second);
+    const cards = [decryptWithPrivateKey( first, this.privateKey),decryptWithPrivateKey( second, this.privateKey)]; 
+    return cards;
+   
 }
 
 roomSchema.methods.decodeCards = function() {

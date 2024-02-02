@@ -1,4 +1,4 @@
-import httpServer from "./app.js";
+import { httpServer } from "./app.js";
 // import dotenv from "dotenv";
 
 const port = process.env.PORT ;

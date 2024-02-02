@@ -3,9 +3,11 @@ import { DollarSign } from "lucide-react";
 import { Coins } from "lucide-react";
 
 //todo :fetch the account balanve of userd form the blockchain...
-const OtherPlayers = ({ name, address, avatar, isFolded }) => {
+const OtherPlayers = ({ name, address, avatar, isFolded, cards }) => {
+  console.log("THe use of user cards.. here...");
+  //TODO: make sure you addd the cards when the address of the userAddress matches..
   return (
-    <div className="relative max-w-[175px] max-h-[180px] z-0 py-2 px-4">
+    <div className={`relative max-w-[175px] max-h-[180px] z-0 py-2 px-4 ${isFolded?" backdrop-filter grayscale":""}`}>
       {/* for blurry effect */}
       <div className="absolute inset-0 w-full h-full -z-10 backdrop-blr-sm"></div>{" "}
       {/* Added "top-0 left-0" to position the blurred div behind the main content */}

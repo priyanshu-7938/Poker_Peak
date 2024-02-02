@@ -1,111 +1,114 @@
-import _A_S from './cards/_A_S.png';
-import _2_S from './cards/_2_S.png';
-import _3_S from './cards/_3_S.png';
-import _4_S from './cards/_4_S.png';
-import _5_S from './cards/_5_S.png';
-import _6_S from './cards/_6_S.png';
-import _7_S from './cards/_7_S.png';
-import _8_S from './cards/_8_S.png';
-import _9_S from './cards/_9_S.png';
-import _10_S from './cards/_10_S.png';
-import _J_S from './cards/_J_S.png';
-import _Q_S from './cards/_Q_S.png';
-import _K_S from './cards/_K_S.png';
-import _A_C from './cards/_A_C.png';
-import _2_C from './cards/_2_C.png';
-import _3_C from './cards/_3_C.png';
-import _4_C from './cards/_4_C.png';
-import _5_C from './cards/_5_C.png';
-import _6_C from './cards/_6_C.png';
-import _7_C from './cards/_7_C.png';
-import _8_C from './cards/_8_C.png';
-import _9_C from './cards/_9_C.png';
-import _10_C from './cards/_10_C.png';
-import _J_C from './cards/_J_C.png';
-import _Q_C from './cards/_Q_C.png';
-import _K_C from './cards/_K_C.png';
-import _A_D from './cards/_A_D.png';
-import _2_D from './cards/_2_D.png';
-import _3_D from './cards/_3_D.png';
-import _4_D from './cards/_4_D.png';
-import _5_D from './cards/_5_D.png';
-import _6_D from './cards/_6_D.png';
-import _7_D from './cards/_7_D.png';
-import _8_D from './cards/_8_D.png';
-import _9_D from './cards/_9_D.png';
-import _10_D from './cards/_10_D.png';
-import _J_D from './cards/_J_D.png';
-import _Q_D from './cards/_Q_D.png';
-import _K_D from './cards/_K_D.png';
-import _A_H from './cards/_A_H.png';
-import _2_H from './cards/_2_H.png';
-import _3_H from './cards/_3_H.png';
-import _4_H from './cards/_4_H.png';
-import _5_H from './cards/_5_H.png';
-import _6_H from './cards/_6_H.png';
-import _7_H from './cards/_7_H.png';
-import _8_H from './cards/_8_H.png';
-import _9_H from './cards/_9_H.png';
-import _10_H from './cards/_10_H.png';
-import _J_H from './cards/_J_H.png';
-import _Q_H from './cards/_Q_H.png';
-import _K_H from './cards/_K_H.png';
+import _A_s from './cards/_A_s.png';
+import _2_s from './cards/_2_s.png';
+import _3_s from './cards/_3_s.png';
+import _4_s from './cards/_4_s.png';
+import _5_s from './cards/_5_s.png';
+import _6_s from './cards/_6_s.png';
+import _7_s from './cards/_7_s.png';
+import _8_s from './cards/_8_s.png';
+import _9_s from './cards/_9_s.png';
+import _10_s from './cards/_10_s.png';
+import _J_s from './cards/_J_s.png';
+import _Q_s from './cards/_Q_s.png';
+import _K_s from './cards/_K_s.png';
+import _A_c from './cards/_A_c.png';
+import _2_c from './cards/_2_c.png';
+import _3_c from './cards/_3_c.png';
+import _4_c from './cards/_4_c.png';
+import _5_c from './cards/_5_c.png';
+import _6_c from './cards/_6_c.png';
+import _7_c from './cards/_7_c.png';
+import _8_c from './cards/_8_c.png';
+import _9_c from './cards/_9_c.png';
+import _10_c from './cards/_10_c.png';
+import _J_c from './cards/_J_c.png';
+import _Q_c from './cards/_Q_c.png';
+import _K_c from './cards/_K_c.png';
+import _A_d from './cards/_A_d.png';
+import _2_d from './cards/_2_d.png';
+import _3_d from './cards/_3_d.png';
+import _4_d from './cards/_4_d.png';
+import _5_d from './cards/_5_d.png';
+import _6_d from './cards/_6_d.png';
+import _7_d from './cards/_7_d.png';
+import _8_d from './cards/_8_d.png';
+import _9_d from './cards/_9_d.png';
+import _10_d from './cards/_10_d.png';
+import _J_d from './cards/_J_d.png';
+import _Q_d from './cards/_Q_d.png';
+import _K_d from './cards/_K_d.png';
+import _A_h from './cards/_A_h.png';
+import _2_h from './cards/_2_h.png';
+import _3_h from './cards/_3_h.png';
+import _4_h from './cards/_4_h.png';
+import _5_h from './cards/_5_h.png';
+import _6_h from './cards/_6_h.png';
+import _7_h from './cards/_7_h.png';
+import _8_h from './cards/_8_h.png';
+import _9_h from './cards/_9_h.png';
+import _10_h from './cards/_10_h.png';
+import _J_h from './cards/_J_h.png';
+import _Q_h from './cards/_Q_h.png';
+import _K_h from './cards/_K_h.png';
 import unknown from './cards/unknown.png';
+
+// const CARDDECK =  ["2_s", "2_h", "2_d", "2_c", "3_s", "3_h", "3_d", "3_c", "4_s", "4_h", "4_d", "4_c", "5_s", "5_h", "5_d", "5_c", "6_s", "6_h", "6_d", "6_c", "7_s", "7_h", "7_d", "7_c", "8_s", "8_h", "8_d", "8_c", "9_s", "9_h", "9_d", "9_c", "10_s", "10_h", "10_d", "10_c", "J_s", "J_h", "J_d", "J_c", "Q_s", "Q_h", "Q_d", "Q_c", "K_s", "K_h", "K_d", "K_c", "A_s", "A_h", "A_d", "A_c"];
+
 
 export default {
 
-  _A_S,
-  _2_S,
-  _3_S,
-  _4_S,
-  _5_S,
-  _6_S,
-  _7_S,
-  _8_S,
-  _9_S,
-  _10_S,
-  _J_S,
-  _Q_S,
-  _K_S,
-  _A_H,
-  _2_H,
-  _3_H,
-  _4_H,
-  _5_H,
-  _6_H,
-  _7_H,
-  _8_H,
-  _9_H,
-  _10_H,
-  _J_H,
-  _Q_H,
-  _K_H,
-  _A_C,
-  _2_C,
-  _3_C,
-  _4_C,
-  _5_C,
-  _6_C,
-  _7_C,
-  _8_C,
-  _9_C,
-  _10_C,
-  _J_C,
-  _Q_C,
-  _K_C,
-  _A_D,
-  _2_D,
-  _3_D,
-  _4_D,
-  _5_D,
-  _6_D,
-  _7_D,
-  _8_D,
-  _9_D,
-  _10_D,
-  _J_D,
-  _Q_D,
-  _K_D,
+  _A_s,
+  _2_s,
+  _3_s,
+  _4_s,
+  _5_s,
+  _6_s,
+  _7_s,
+  _8_s,
+  _9_s,
+  _10_s,
+  _J_s,
+  _Q_s,
+  _K_s,
+  _A_h,
+  _2_h,
+  _3_h,
+  _4_h,
+  _5_h,
+  _6_h,
+  _7_h,
+  _8_h,
+  _9_h,
+  _10_h,
+  _J_h,
+  _Q_h,
+  _K_h,
+  _A_c,
+  _2_c,
+  _3_c,
+  _4_c,
+  _5_c,
+  _6_c,
+  _7_c,
+  _8_c,
+  _9_c,
+  _10_c,
+  _J_c,
+  _Q_c,
+  _K_c,
+  _A_d,
+  _2_d,
+  _3_d,
+  _4_d,
+  _5_d,
+  _6_d,
+  _7_d,
+  _8_d,
+  _9_d,
+  _10_d,
+  _J_d,
+  _Q_d,
+  _K_d,
   unknown
 
 }

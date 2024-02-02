@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 // import { useSocketContext } from "../socketContext";
 // import { socket } from "../socket";
 // import useSocketSetupForRoom from "../socketUtils/useSocketSetupForRoom";
-import { Navigate, Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { message } from "react-message-popup";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Fullscreen, Shrink } from "lucide-react";
 import PlayerCard from "@/components/game/PlayerCard";
@@ -26,6 +27,11 @@ export default function Room() {
   const socket = useSocket();
 
   //game Status mainntaining...
+  const [ stateOfGame, setStateOfGame] = useState("resting");
+  const [ theCurrentBet, setTheCurrentBet ] = useState(0);
+  const [ theUserCards, setTheUserCards ] = useState();
+  const [ theTabelCards, setTheTabelCards ] = useState();
+  const [ thePoolAmount, setThePoolAmount ] = useState(0);
   const [ theExpectedPlayer, setExpectedPlayer] = useState();
   const [ players, setPlayers ] = useState();
 
@@ -35,13 +41,18 @@ export default function Room() {
       alert("i got the event Baby....");
     });
 
+    socket.on("update",()=>{
+      fetchTHeUsers();
+    })
+
     // io.emit("UserFoldedWithReason",{
     //     reason: data.data.reason,
     //     addressToFOld: data.data.foldAddress,
     //     users: room.users,
     // });
-    socket.on("testingEvent",()=>{
-      //do some stuff here...
+    socket.on("UserFoldedWithReason",(data)=>{
+      message.info(data.addressToFOld+" folded,Reason:"+data.reason,2000);
+      fetchTHeUsers();
     });
 
     // io.emit("betRaised",{
@@ -50,8 +61,11 @@ export default function Room() {
     //     expectedUser: data.data.nextUser,
     //     raisedByAddress:raiserAddress,
     // })
-    socket.on("betRaised",()=>{
-      //do some releted stuff..
+    socket.on("betRaised",(data)=>{
+      setTheCurrentBet(data.currentBet);
+      setThePoolAmount(data.currentPool);
+      setExpectedPlayer(data.expectedUser);
+      message.info("The bet was raised to  "+data.currentBet+"$!",3000);
     });
 
     //io.emit("betCalled",{
@@ -60,8 +74,11 @@ export default function Room() {
     //     expectedUser: data.data.nextUser,
     //     raisedByAddress:raiserAddress,
     // })
-    socket.on("betCalled",()=>{
-      // do the stuff here....
+    socket.on("betCalled",(data)=>{
+      setThePoolAmount(data.currentPool);
+      setExpectedPlayer(data.expectedUser);
+      setTheCurrentBet(data.currentBet);
+      message.info("The Bet was Called",2000);
     });
 
     //io.emit("deckPost",{
@@ -69,7 +86,7 @@ export default function Room() {
     //  "msg":"deck was posted.",
     //});
     socket.on("deckPost",()=>{
-      //do some stuff here also....
+      message.info("The deck is distributed..!!",500);
     });
 
     // io.emit("pKeyExposed",{
@@ -77,15 +94,17 @@ export default function Room() {
     //   "msg":"PkeyIsExposed",
     // });
     socket.on("pKeyExposed",()=>{
-      // do some stuff here toooo..
+      message.info("The pivate Key is Posted on contract!");
     });
 
     // io.emit("StateDiscloser",{
     //   "status":data.data.stateTransitationTo,
     //   "msg":"Status was updated",
     // });
-    socket.on("StateDiscloser",()=>{
-      //do some stuff here..
+    socket.on("StateDiscloser",(data)=>{
+      //run the cards fetcher...
+      fetchTheUserCards();
+      setStateOfGame(data.status);
     });
 
     // io.emit("RandomNumberGenerated",{
@@ -110,11 +129,69 @@ export default function Room() {
   }, [socket]);
 
   useEffect(()=>{
+    //TODO: add fetchRoomState....
+
     fetchTHeUsers();
+    fetchTheUserCards();
+    fetchTheTabelCards();
   },[]);
+  useEffect(()=>{
+    // ['resting','firstloop','secondloop','thirdloop','ended'],
+    if(stateOfGame === "resting")return;
+    fetchTheTabelCards();
+    
+  },[stateOfGame]);
 
   useEffect(()=>{console.log(players);},[players])
 
+  const fetchTheUserCards = () => {
+    if(!userAddress){return;}
+    if(stateOfGame === "resting"){
+      console.log("cant fetch Cards ,game not started yet...");
+      return;
+    }
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("address", roomToken);
+    urlencoded.append("userAddress", userAddress);
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: 'follow'
+    };
+
+    fetch("http://localhost:2024/fetchCards", requestOptions)
+      .then(response => response.text())
+      .then(result => setTheUserCards(JSON.parse(result).cards))
+      .catch(error => console.log('error', error));
+  }
+  const fetchTheTabelCards = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("address", roomToken);
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: 'follow'
+    };
+
+    fetch("http://localhost:2024/fetchTabelCards", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        const res = JSON.parse(result);
+        if(res.status === 100)return;
+        setTheTabelCards(res.cards);
+      })
+      .catch(error => console.log('error', error));
+  }
   const fetchTHeUsers = () => { 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -153,10 +230,8 @@ export default function Room() {
 
     var requestOptions = {
       method: "POST",
-      method: "POST",
       headers: myHeaders,
       body: urlencoded,
-      redirect: "follow"
       redirect: "follow"
     };
 
@@ -222,7 +297,7 @@ export default function Room() {
           </Button>
           <div className="flex flex-col gap-2">
             <h3 className="text-xl font-medium">Players :
-              {" "+players.length}/6</h3>
+              {players && " "+players.length}/6</h3>
             <Button
               onClick={leaveRoom}
               variant={"secondary"}
@@ -261,7 +336,7 @@ export default function Room() {
                       : ""
                   }`}`}
                 >
-                  <PlayerCard {...player} />
+                  <PlayerCard {...player} cards={theUserCards} />
                 </div>
               ))}
           </div>
