@@ -273,8 +273,8 @@ roomSchema.methods.initGame = function () {
     }
   });
 
-  this.publicKey = privateKey;
-  this.privateKey = publicKey;
+  this.publicKey = publicKey;
+  this.privateKey = privateKey;
   //fetching a deck
   const randomDeck = getARandomDeck();
 
@@ -285,8 +285,17 @@ roomSchema.methods.initGame = function () {
   // calling the contract for init game...
 };
 
-roomSchema.method.flushData = function() {
-    //flushing the gamedata
+roomSchema.methods.flushData = function() {
+    this.status = "resting";
+    this.users = [];
+    this.encryptedDeck = [];
+    this.encryptedGameDeck = [];
+    this.privateKey = "";
+    this.publicKey = "";
+    this.pooledAmount = 0;
+    this.memberCount = 0;
+    this.randomNumberGenerated = false;
+    this.save({ validateBeforeSave: false });
 }
 roomSchema.pre("validate", function (next) {
   if (!this.isNew) {

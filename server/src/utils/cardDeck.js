@@ -99,38 +99,35 @@ const GameInitBaby = async (contractAddress) => {
     }
 }
 const GameResetBaby = async (contractAddress) => {
-    //TODO: compplete the function here...
-    //make sure to call the randGen to gen the number then resets all the stuff...
+    
     const room = await Room.findByAddressValue(contractAddress);
-    //k for this we have to get the.. first contract reset function.. 
-    // then the randomnumber fetcher function...
-    // then the 
-    
 
-    //call the gamerest function and then generate a new random  number for the contract....
-    //reset the dbms room too...
-
-    //privateKeyDeployed.
-    await contract.call("uploadPrivateKey", [_privatekey])
-    console.log("!!Game Important: entered the GameDeckUploded.");
-    //getting the expeectedUser he will be the winner...
-    const _winner = await contract.call("expectedUserAddress", []);
-
-    //calling the gameResetFunction
-    await contract.call("hardResetWithCleanup", [_winner]);
-    console.log("!!Game Important: Reset The Game With CleanUp & Winner Funded");
-    // generate the random number...
-    const _sponsorWallet = room.sponcerAddress;
-    await contract.call("GenerateRandomNumber", [_sponsorWallet]);
-    console.log("!!Game Important: The request for new random number if initiated.!");
-
-    //now dbms cleanup... bebo and new initiation...
-    
-
+    try{
+        //privateKeyDeployed.
+        await contract.call("uploadPrivateKey", [_privatekey])
+        console.log("!!Game Important: entered the GameDeckUploded.");
+        //getting the expeectedUser he will be the winner...
+        const _winner = await contract.call("expectedUserAddress", []);
+        
+        //calling the gameResetFunction
+        await contract.call("hardResetWithCleanup", [_winner]);
+        console.log("!!Game Important: Reset The Game With CleanUp & Winner Funded");
+        
+        //now dbms cleanup... bebo and new initiation...
+        await room.flushData();
+        await room.initGame();
+        
+        // generate the random number...
+        const _sponsorWallet = room.sponcerAddress;
+        await contract.call("GenerateRandomNumber", [_sponsorWallet]);
+        console.log("!!Game Important: The request for new random number if initiated.!");
+    }catch(error){
+        console.log("!!ERROR: at the resetting of the system...");
+    }
 }
 const _postDeckAndShuffel = async (contractAddress) => {
     //uploding the deck of the game. AFTER: randGenerated.
-    const room = await Room.findByAddressValue(contractAddress);
+    const room = await Room.findByAddressValue(contractAddress);    
     try{
         const TheContract = await sdk.getContract(contractAddress);
         const _deck = room.encryptedDeck;
