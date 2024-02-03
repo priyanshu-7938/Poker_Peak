@@ -13,17 +13,17 @@ Welcome to our online poker 🎉 featuring 52 decks, where the server acts as th
   ### Game Implementation 🧑‍💻
 The game is implemented using a pseudo-state machine architecture on a smart contract. In this pseudo-state machine, the game transitions between different states, each opening up possibilities for specific functions to be called. This architecture ensures a structured and dynamic gameplay experience.
 
-### State Emission
+### State Emission 🌟 
 
 What sets this game apart is its continuous state emission. On each state change, the game emits its current state. These emitted states are observed by a server, allowing real-time updates. This crucial information is then seamlessly presented to all connected users, creating an immersive and synchronized gaming environment.
 
-### Transaction-based Gameplay
+### Transaction-based Gameplay 💸
 
 The game loop kicks off when server initiates a transaction to the smart contract. This transaction triggers a series of events ( generating random number,shuffeling the deck, emmiting the shuffeled deck(encrypted)): the state change is emitted, observed by the server, and relayed to all connected players. The loop continues as users interact with the game, making transactions that, in turn, update the game's state and keep the server and players in sync.
 
 The seamless flow of transactions, state emissions, and server updates continues until the game reaches its completion.
 
-## Some Sneak Peak of poker gameplays 🃏✨
+## Some Sneak Peak of poker gameplays 👀✨
 
 Project update images!.
 
