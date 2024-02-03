@@ -118,7 +118,6 @@ roomSchema.methods.allUsers = async function () {
   //get name address avatar
   for (const i in users) {
     const val = await User.findOne(users[i].id);
-    console.log("val: ", val);
     userData.push({
       address: val.address,
       name: val.name,
@@ -132,17 +131,25 @@ roomSchema.methods.allUsers = async function () {
 roomSchema.methods.foldUserByAddress = async function (foldAddress) {
   // changing the status of the user to fold for specific user../
   const room = this;
-  console.log("room:", room);
   const users = room.users;
-  const updatedUsers = users.map((item) => {
-    const oneUser = User.findById(item.id);
-    if (oneUser.address == foldAddress) {
-      return { ...item, isFolded: true };
+    var updatedUsers = [];
+    for(let i in users){
+        console.log(users[i]);
+        const oneUser = await User.findById(users[i].id);
+        console.log(oneUser.address, foldAddress);
+        if (oneUser.address === foldAddress) {
+            console.log(users[i])
+            updatedUsers.push({ ...users[i], isFolded: true });
+        }
+        else{
+            updatedUsers.push(users[i]);
+        }
+        
     }
-    return item;
-  });
+
   room.users = updatedUsers;
   await room.save({ validateBeforeSave: false });
+  return updatedUsers;
 };
 
 roomSchema.methods.getFirst4Cards = function () {

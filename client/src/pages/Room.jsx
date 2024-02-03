@@ -14,6 +14,20 @@ import Chats from "@/components/game/Chats";
 import { Toaster, toast } from "sonner";
 import { useAddress } from "@thirdweb-dev/react";
 
+//contract read stuff...
+
+import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains";
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+
+// If used on the FRONTEND pass your 'clientId'
+const sdk = new ThirdwebSDK(LightlinkPegasusTestnet, {
+  clientId: "5569ec4bd273c9e940fe4ff0cc4dd685",
+});
+
+const TheContract = await sdk.getContract("0x719A03ae0122cC82621C9a863bdF49D93d419687");
+
+//contract read initilisation done....
+
 export default function Room() {
   // const [message, setMessage] = useState("");
   // const { emitMessage } = useSocketContext();
@@ -127,7 +141,14 @@ export default function Room() {
       setLoading(false);
     }, 2000);
   }, [socket]);
-
+  useEffect(() => {
+    const myInterval = setInterval( async () => {
+      const data = await TheContract.call("expectedUserAddress", [])
+      setExpectedPlayer(data);
+    }, 5000);
+    //this function to clear the bug in code that sometimes the page wont get the information of the exectedUser...
+    return () => clearInterval(myInterval);
+  }, []); 
   useEffect(() => {
     const handleResize = () => {
       setScreenHeight(window.innerHeight);
@@ -292,23 +313,6 @@ export default function Room() {
         {/* upper side */}
         <div className="flex justify-between">
           <h1 className="text-xl font-medium">RoomId : {roomToken}</h1>
-          <Button
-            onClick={fullScreenHandler}
-            variant="destructive"
-            className="text-red-100 relative -top-5"
-          >
-            {FullScreenTrigger ? (
-              <>
-                Enter FullScreen
-                <Fullscreen className="ml-3" />
-              </>
-            ) : (
-              <>
-                Exit FullScreen
-                <Shrink className="ml-3" />
-              </>
-            )}
-          </Button>
           <div className="flex flex-col gap-2">
             <h3 className="text-xl font-medium">
               Players :{players && " " + players.length}/6
@@ -357,27 +361,26 @@ export default function Room() {
           </div>
         </div>
         {/* Buttons */}
-        <div className={`flex self-center items-center space-x-3 pb-4 ${screenHeight < 800 && 'pb-0' }`}>
-          <Button
-            size="lg"
-            className="px-14 border border-black text-gray-900 rounded-full bg-red-500 "
-          >
-            Fold
-          </Button>
-          <Button
-            size="lg"
-            className="px-14 border border-black text-gray-900 rounded-full bg-green-600 "
-          >
-            Call
-          </Button>
-          <Button
-            size="lg"
-            className="px-14 border border-black text-gray-900 rounded-full bg-[#FFDA49]"
-          >
-            Raise
-          </Button>
-        </div>
-        <p>{"player 1 turn"}</p>
+          <div className={`flex self-center items-center space-x-3 pb-4 ${screenHeight < 800 && 'pb-0' }`}>
+            <Button
+              size="lg"
+              className={`px-14 border border-black text-white rounded-full bg-[#0f0f0f] ${theExpectedPlayer && theExpectedPlayer === userAddress ? "":"cursor-not-allowed opacity-50"}`}
+            >
+              Fold
+            </Button>
+            <Button
+              size="lg"
+              className={`px-14 border border-black text-white rounded-full bg-[#516d3c] ${theExpectedPlayer && theExpectedPlayer === userAddress ? "":"cursor-not-allowed opacity-50"}`}
+            >
+              Call
+            </Button>
+            <Button
+              size="lg"
+              className={`px-14 border border-black text-white rounded-full bg-[#9f7c40] ${theExpectedPlayer && theExpectedPlayer === userAddress ? "":"cursor-not-allowed opacity-50"}`}
+            >
+              Raise
+            </Button>
+          </div>
       </div>
     </main>
   );

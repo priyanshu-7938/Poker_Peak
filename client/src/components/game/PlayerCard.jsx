@@ -36,7 +36,7 @@ const OtherPlayers = ({
     <div
       className={`relative max-w-[175px] max-h-[180px] z-0 py-2 px-4 ${
         isFolded ? " backdrop-filter grayscale" :
-        currentUser && 'max-w-[190px] border rounded-md border-gray-400 max-h-max '
+        true && 'max-w-[190px] border-[4px] rounded-md border-[#1f1c1c] max-h-max '
       }`}
     >
       {/* for blurry effect */}
@@ -45,14 +45,14 @@ const OtherPlayers = ({
       <main className="flex flex-col z-10 items-center">
         {/* absolute image container */}
         {currentUser ? (
-          <div className="absolute xl:-top-14 -top-8 flex -space-x-10">
+          <div className="absolute xl:top-16 top-8 flex -space-x-10">
             {cardImages &&
               cardImages.map((imagePath, index) => (
                 <img
                   key={index}
-                  className="w-20 xl:w-24"
+                  className="w-12 xl:w-16"
                   src={imagePath}
-                  alt={`Card ${index + 1}`}
+                  alt={`Card ${imagePath}`}
                 />
               ))}
           </div>

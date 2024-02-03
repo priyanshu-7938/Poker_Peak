@@ -1,5 +1,6 @@
 import Room from "../models/room.js";
-import { decryptWithPrivateKey } from "../utils/cardDeck.js";
+import User from "../models/user.js";
+import { decryptWithPrivateKey, GameInitBaby, GameResetBaby} from "../utils/cardDeck.js";
 
 const UserFoldedWithReason = async (data, io) => {
     //folding the user whith the given addres
@@ -64,12 +65,21 @@ const StateDiscloser = async (data, io) => {
         "status":data.data.stateTransitationTo,
         "msg":"Status was updated",
     });
+    //TODO: when the state is ENded, game reset... baby...
+    if(data.data.stateTransitationTo === "ended" ){
+        GameResetBaby(room.contrctAddress);
+    }
 }
 const RandomNumberGenerated = async (data, io) => {
     //(uint8 emitCode , uint256 indexed createdOn ,address indexed createdBy ,  uint256 indexed nonce , uint256 randomNumber )
     const room = await Room.findByAddressValue(data.transaction.address);
     room.randomNumberGenerated = data.data.randomNumber;
     await room.save({validateBeforeSave:false});
+    //if the room size is full that is the size is 6 then we would jus initiate the game here itself...
+    if(room.users.length == 6 ){
+        //wallaha we can proceed to the game
+        GameInitBaby(room.contrctAddress);
+    }
     io.emit("RandomNumberGenerated",{
         "status":200,
         "msg":"Deck was poseted.",

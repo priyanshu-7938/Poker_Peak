@@ -27,16 +27,7 @@ const RegisterForTheRoom = async (req,res)=>{
         //meaning there is an error...
         req.json({"status":"the room not found..."});
     }
-    //if validate the txn then
-    //TODO: validate the txn here if valid move ahead..
-    // simply call the user adding function..
-    
-
-
-
     res.send("helo"); 
-
-
 }
 
 

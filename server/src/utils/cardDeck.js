@@ -1,5 +1,6 @@
 import { spawn } from 'child_process';
 import dotenv from "dotenv";
+import Room from "../models/room.js";
 dotenv.config();
 
 
@@ -42,6 +43,12 @@ const GenrateSopnecerWallet = (address) => {
     '--sponsor-address', sponsorAddress,
     ];
 
+    /*
+    @api3/airnode-admin derive-sponsor-wallet-address --airnode-xpub xpub6CuDdF9zdWTRuGybJPuZUGnU4suZowMmgu15bjFZT2o6PUtk4Lo78KGJUGBobz3pPKRaN9sLxzj21CMe6StP3zUsd8tWEJPgZBesYBMY7Wo --airnode-address 0x6238772544f029ecaBfDED4300f13A3c4FE84E1D --sponsor-address 0xe40ca8f5Df3c4ee03a8E4f9A35C7f86F4362326c
+
+
+    */
+
     const airnodeProcess = spawn(command, args, { stdio: 'inherit' });
 
     airnodeProcess.on('exit', (code) => {
@@ -59,8 +66,26 @@ const GenrateSopnecerWallet = (address) => {
         console.error(`Error: ${err.message}`);
     });
 }
+const GameInitBaby = async (contractAddress) => {
+    //game init baby...
+    // processes 
+    // upload the users... to the contract then the game starts..
+    //TODO :complete this function...
+
+
+
+
+}
+const GameResetBaby = async (contractAddress) => {
+    //TODO: compplete the function here...
+    //make sure to call the randGen to gen the number then resets all the stuff...
+    
+}
+
 export {
     CARDDECK,
+    GameInitBaby,
+    GameResetBaby,
     getARandomDeck,
     decryptWithPrivateKey,
     encryptWithPublicKey,
