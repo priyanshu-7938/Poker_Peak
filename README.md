@@ -82,3 +82,9 @@ The reshuffled cards are emitted, and their states are observed on the server. T
 3. Enable individuals to serve as dealers and host their own game rooms.
 4. Implement a stable token system for rewarding users and facilitating in-game transactions.
 5. Integrate a secure and efficient matchmaking system to enhance player experience.
+
+# Team Members
+
+
+- Priyanshu Soni
+- Mohammed Saad
