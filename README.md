@@ -1,12 +1,16 @@
-# Poker Peak
+  <div align="center">
+  <h1>Poker Peaks</h1>
+  <p>
+    <strong>Where skill meets true randomness - harnessing the power of AP13 Airnode RNG for an unbeatable blockchain poker experience.</strong>
+  </p>
+<p></p>
+</div>
+</br>
+<center>
+Welcome to our online poker 🎉 featuring 52 decks, where the server acts as the dealer 🤖 responsible for shuffling and distributing cards to players 🃏. Each game room accommodates up to six players 👥, with multiple rooms initialized by the server 🚀. Room dealers have the authority to set entry fees 💰 for participating players, adding an extra layer of excitement! Players can enjoy an authentic poker experience with options to fold, call, and raise, mirroring real-life gameplay 🎲. Get ready to bluff, strategize, and win big! 💪🏼
+</center>
 
-** A web3 based Poker game!!**
-# Poker of Hands
-
-## Description
-We implementing the Poker of hands.
-### Game Implementation
-
+  ### Game Implementation 🧑‍💻
 The game is implemented using a pseudo-state machine architecture on a smart contract. In this pseudo-state machine, the game transitions between different states, each opening up possibilities for specific functions to be called. This architecture ensures a structured and dynamic gameplay experience.
 
 ### State Emission
@@ -19,7 +23,7 @@ The game loop kicks off when server initiates a transaction to the smart contrac
 
 The seamless flow of transactions, state emissions, and server updates continues until the game reaches its completion.
 
-## Image refrences
+## Some Sneak Peak of poker gameplays 🃏✨
 
 Project update images!.
 
@@ -61,7 +65,6 @@ Using a generated random number and Affine cryptic mapping, the cards are reshuf
 The reshuffled cards are emitted, and their states are observed on the server. These emitted cards are later decrypted and forwarded to respective users.
 
 
-
 ## Features
 
 - _Feature 1: Allows ownership of assets of user to them self by, allowing payment of required bets /and call during the game itself.
@@ -73,3 +76,9 @@ The reshuffled cards are emitted, and their states are observed on the server. T
   The fronntend is under development
   And same for the server fro the game.
 
+## Future Goals
+1. Achieve full responsiveness in the UI design.
+2. Ensure compatibility with the Ethereum Virtual Machine (EVM).
+3. Enable individuals to serve as dealers and host their own game rooms.
+4. Implement a stable token system for rewarding users and facilitating in-game transactions.
+5. Integrate a secure and efficient matchmaking system to enhance player experience.
