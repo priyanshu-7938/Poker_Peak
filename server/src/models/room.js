@@ -59,7 +59,7 @@ const roomSchema = new mongoose.Schema(
     sponcerAddress: {
       type: String,
       unique: true
-    }
+    },
   },
   {
     timestamps: true
@@ -285,6 +285,9 @@ roomSchema.methods.initGame = function () {
   // calling the contract for init game...
 };
 
+roomSchema.method.flushData = function() {
+    //flushing the gamedata
+}
 roomSchema.pre("validate", function (next) {
   if (!this.isNew) {
     return next();

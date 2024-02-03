@@ -2,7 +2,7 @@ import express from "express";
 import Room from "../models/room.js";
 import { RegisterForTheRoom } from "../controllers/room.js";
 import User from "../models/user.js";
-import { encryptWithPublicKey, decryptWithPrivateKey, GameInitBaby } from "../utils/cardDeck.js";
+import { encryptWithPublicKey, decryptWithPrivateKey, GameResetBaby } from "../utils/cardDeck.js";
 import { io } from "../app.js";
 import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
@@ -147,5 +147,13 @@ router.post("/roomData",async (req,res)=>{
   const room = await Room.findByAddressValue(contractAddress);
 const dataToSend = await room.getSanitizedRoomInfo();
 })
+
+router.post("/test",async (req,res)=>{
+  //testing logic here...  
+
+  await GameResetBaby(req.body.address);
+
+  res.send("done");
+});
 
 export default router;

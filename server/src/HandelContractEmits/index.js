@@ -49,6 +49,7 @@ const deckPost = async (data, io) => {
         "status":200,
         "msg":"deck was posted.",
     });
+    console.log("!!Game Important: The game deck is fetched at the server...");
 }
 const pKeyExposed = async (data, io) => {
     io.emit("pKeyExposed",{

@@ -1,12 +1,19 @@
 import { spawn } from 'child_process';
 import dotenv from "dotenv";
 import Room from "../models/room.js";
+import User from '../models/user.js';
+import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains";
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+
+
 dotenv.config();
 
 
 import crypto from "crypto";
 const CARDDECK =  ["2_s", "2_h", "2_d", "2_c", "3_s", "3_h", "3_d", "3_c", "4_s", "4_h", "4_d", "4_c", "5_s", "5_h", "5_d", "5_c", "6_s", "6_h", "6_d", "6_c", "7_s", "7_h", "7_d", "7_c", "8_s", "8_h", "8_d", "8_c", "9_s", "9_h", "9_d", "9_c", "10_s", "10_h", "10_d", "10_c", "J_s", "J_h", "J_d", "J_c", "Q_s", "Q_h", "Q_d", "Q_c", "K_s", "K_h", "K_d", "K_c", "A_s", "A_h", "A_d", "A_c"];
-
+const sdk = ThirdwebSDK.fromPrivateKey("b468b6263292af56fcb78cfce1fc83ba504422307b4baa6cb99b8f3d01ebd3d0", LightlinkPegasusTestnet, {
+    secretKey: "TbEJa6nQ01Nc7BHZuOG3jAiTOOTPN_AkeEmt8Qnlp7aQmgfzurz0z8_yiGOrVY-4CL5HdxHp4vbSxwkMzNuD8w",
+  } );
 
 const getARandomDeck = ()=>{
     const shuffledDeck = CARDDECK.map((item,index)=>{
@@ -68,18 +75,73 @@ const GenrateSopnecerWallet = (address) => {
 }
 const GameInitBaby = async (contractAddress) => {
     //game init baby...
-    // processes 
-    // upload the users... to the contract then the game starts..
-    //TODO :complete this function...
+    //TODO: remove the below comment it is there because it should nt be run this time cause it does not need to be for the first loop.
 
-
-
-
+    // _postDeckAndShuffel(contractAddress);
+    
+    const room = await Room.findByAddressValue(contractAddress);
+    const users = room.users;
+    let userArray = [];
+    for(let i in users){
+        const userData = await User.findById(users[i].id);
+        userArray.push([userData.address, "Secret String",users[i].isFolded]);
+    }
+    //now posting to contract...
+    try{
+        //trying to get contract...
+        const TheContract = await sdk.getContract(contract);
+        const data = await TheContract.call("gameInit", [userArray])
+        console.log("!!Game Important: Pushed The Users To Game And Now Rock.!");
+        console.log(data);
+    }
+    catch(error){
+        res.json({ "status": 100, "msg":error });
+    }
 }
 const GameResetBaby = async (contractAddress) => {
     //TODO: compplete the function here...
     //make sure to call the randGen to gen the number then resets all the stuff...
+    const room = await Room.findByAddressValue(contractAddress);
+    //k for this we have to get the.. first contract reset function.. 
+    // then the randomnumber fetcher function...
+    // then the 
     
+
+    //call the gamerest function and then generate a new random  number for the contract....
+    //reset the dbms room too...
+
+    //privateKeyDeployed.
+    await contract.call("uploadPrivateKey", [_privatekey])
+    console.log("!!Game Important: entered the GameDeckUploded.");
+    //getting the expeectedUser he will be the winner...
+    const _winner = await contract.call("expectedUserAddress", []);
+
+    //calling the gameResetFunction
+    await contract.call("hardResetWithCleanup", [_winner]);
+    console.log("!!Game Important: Reset The Game With CleanUp & Winner Funded");
+    // generate the random number...
+    const _sponsorWallet = room.sponcerAddress;
+    await contract.call("GenerateRandomNumber", [_sponsorWallet]);
+    console.log("!!Game Important: The request for new random number if initiated.!");
+
+    //now dbms cleanup... bebo and new initiation...
+    
+
+}
+const _postDeckAndShuffel = async (contractAddress) => {
+    //uploding the deck of the game. AFTER: randGenerated.
+    const room = await Room.findByAddressValue(contractAddress);
+    try{
+        const TheContract = await sdk.getContract(contractAddress);
+        const _deck = room.encryptedDeck;
+        const data0 = await TheContract.call("uploadEncriptedDeck", [_deck])
+        console.log("!!Game Important: entered the GameDeckUploded.");
+        const data1 = await TheContract.call("shuffleDeck", []);
+        console.log("!!Game Important: The deck is shuffeled.");
+    }
+    catch(error){
+        console.log("!!ERROR: ",error);
+    }
 }
 
 export {
