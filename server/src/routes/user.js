@@ -15,7 +15,7 @@ router.post("/game",routingToGame);
 
 router.post("/createroom",creatingARoom);
 
-router.post("/userDate",async (req,res) => {
+router.post("/userData",async (req,res) => {
     const user = await User.findByAddressValue(req.body.address);
     res.json(user.toJSON());
 });

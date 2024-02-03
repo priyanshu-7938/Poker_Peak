@@ -150,9 +150,13 @@ const dataToSend = await room.getSanitizedRoomInfo();
 
 router.post("/test",async (req,res)=>{
   //testing logic here...  
+  
+  // await GameResetBaby(req.body.address);
 
-  await GameResetBaby(req.body.address);
 
+  const room = await Room.findByAddressValue("0x719A03ae0122cC82621C9a863bdF49D93d419687");
+  room.randomNumberGenerated = true;
+  await room.save({ validateBeforeSave: false });
   res.send("done");
 });
 

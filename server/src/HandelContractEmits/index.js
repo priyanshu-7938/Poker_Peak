@@ -66,7 +66,6 @@ const StateDiscloser = async (data, io) => {
         "status":data.data.stateTransitationTo,
         "msg":"Status was updated",
     });
-    //TODO: when the state is ENded, game reset... baby...
     if(data.data.stateTransitationTo === "ended" ){
         GameResetBaby(room.contrctAddress);
     }
@@ -74,7 +73,7 @@ const StateDiscloser = async (data, io) => {
 const RandomNumberGenerated = async (data, io) => {
     //(uint8 emitCode , uint256 indexed createdOn ,address indexed createdBy ,  uint256 indexed nonce , uint256 randomNumber )
     const room = await Room.findByAddressValue(data.transaction.address);
-    room.randomNumberGenerated = data.data.randomNumber;
+    room.randomNumberGenerated = true;
     await room.save({validateBeforeSave:false});
     //if the room size is full that is the size is 6 then we would jus initiate the game here itself...
     if(room.users.length == 6 ){
