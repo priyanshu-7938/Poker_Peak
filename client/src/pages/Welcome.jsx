@@ -19,13 +19,13 @@ export default function Welcome() {
           </div>
         </div>
         {/* links */}
-        <div className="flex space-x-4 text-[1.1rem] items-center">
+        <div className="flex space-x-14 text-[1.1rem] items-center">
           <Link to="/">Home</Link>
           <Link to="/">Contest</Link>
           <Link to="/">Rooms</Link>
           <Link to="/">DashBoard</Link>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           {token === null ? (
             <>
               <Button
@@ -71,7 +71,7 @@ export default function Welcome() {
               />
             </div>
             {/* description */}
-            <p className='text-gray-400'>
+            <p className='text-[#9c9c9c] text-[1.1rem] lg:w-[90%]'>
               Where skill meets true randomness - harnessing the power of AP13
               Airnode RNG for an unbeatable blockchain poker experience.
             </p>
