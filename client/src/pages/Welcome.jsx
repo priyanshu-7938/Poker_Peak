@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowRightToLineIcon } from "lucide-react";
 import { Faq } from "@/components/Faq";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 
 export default function Welcome() {
   const navigator = useNavigate();
@@ -90,6 +91,7 @@ export default function Welcome() {
           </div>
         </div>
       </main>
+      <Footer className='absolute bottom-2' />
     </div>
   );
 }
