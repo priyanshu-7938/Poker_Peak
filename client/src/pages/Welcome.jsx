@@ -12,7 +12,7 @@ export default function Welcome() {
   const token = localStorage.getItem("token");
 
   return (
-    <div className="h-full p-3 dark bg-background min-h-screen">
+    <div className="h-full relative p-3 dark bg-background min-h-screen">
       <div className="flex justify-between">
         <div className="flex gap-2">
           <div className="flex items-center justify-center">
@@ -77,7 +77,7 @@ export default function Welcome() {
               Airnode RNG for an unbeatable blockchain poker experience.
             </p>
             {/* boxes */}
-            <div className='flex w-[80%] gap-x-6 mt-6'>
+            <div className='flex w-[82%] max-md:w-full gap-x-6 mt-6'>
               <Faq />
             </div>
           </section>
