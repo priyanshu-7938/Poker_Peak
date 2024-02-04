@@ -77,7 +77,7 @@ export default function Welcome() {
               Airnode RNG for an unbeatable blockchain poker experience.
             </p>
             {/* boxes */}
-            <div className='flex w-full gap-x-6 mt-6'>
+            <div className='flex w-[80%] gap-x-6 mt-6'>
               <Faq />
             </div>
           </section>
