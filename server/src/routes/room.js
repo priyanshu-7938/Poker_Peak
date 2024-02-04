@@ -113,20 +113,20 @@ router.post("/fetchTabelCards", async (req,res)=>{
   const room = await Room.findByAddressValue(contractAddress);
   switch(room.status){
     // enum: ['resting','firstloop','secondloop','thirdloop','ended'],
-    case "resting":
+    case "0":
       //meaning the cards not been displayed..
       res.json({"status":100,"msg":"game not started yet"});
       return;
-    case "firstloop":
+    case "1":
       const result = await room.getFirst3Cards();
       res.json({"status":200,"cards":result});
       return;
-    case "secondloop":
+    case "2":
       const result1 = await room.getFirst4Cards();
       res.json({"status":200,"cards":result1});
       return;
-    case "thirdloop":
-    case "ended":
+    case "3":
+    case "4":
       const result2 = await room.getFirst5Cards();
       res.json({"status":200,"cards":result2});
       return;
@@ -148,7 +148,7 @@ const dataToSend = await room.getSanitizedRoomInfo();
 router.post("/test",async (req,res)=>{
   //testing logic here...  
   
-  // await GameResetBaby(req.body.address);
+  await GameResetBaby(req.body.address);
 
 
   // const room = await Room.findByAddressValue("0x719A03ae0122cC82621C9a863bdF49D93d419687");

@@ -154,7 +154,7 @@ roomSchema.methods.foldUserByAddress = async function (foldAddress) {
 
 roomSchema.methods.getFirst4Cards = function () {
   if (this.status == "secondloop" || this.stauts == "thirdloop") {
-    return this.encryptedGameDeck
+    return this.encryptedDeck
       .map((item) => decryptWithPrivateKey(item, this.privateKey))
       .slice(-5)
       .slice(0, 4);
@@ -164,7 +164,7 @@ roomSchema.methods.getFirst4Cards = function () {
 
 roomSchema.methods.getFirst5Cards = function () {
   if (this.stauts == "thirdloop" || this.status == "ended") {
-    return this.encryptedGameDeck
+    return this.encryptedDeck
       .map((item) => decryptWithPrivateKey(item, this.privateKey))
       .slice(-5);
     // return decryptWithPrivateKey( this.encryptedGameDeck, this.privateKey).slice(-5);
@@ -286,7 +286,7 @@ roomSchema.methods.initGame = function () {
   // calling the contract for init game...
 };
 
-roomSchema.methods.flushData = function() {
+roomSchema.methods.flushData = async function() {
     this.status = "resting";
     this.users = [];
     this.encryptedDeck = [];
@@ -296,7 +296,8 @@ roomSchema.methods.flushData = function() {
     this.pooledAmount = 0;
     this.memberCount = 0;
     this.randomNumberGenerated = false;
-    this.save({ validateBeforeSave: false });
+    await this.save({ validateBeforeSave: false });
+    this.initGame();
 }
 roomSchema.pre("validate", function (next) {
   if (!this.isNew) {
