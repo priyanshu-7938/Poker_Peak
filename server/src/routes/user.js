@@ -15,9 +15,15 @@ router.post("/game",routingToGame);
 
 router.post("/createroom",creatingARoom);
 
-router.post("/userData",async (req,res) => {
-    const user = await User.findByAddressValue(req.body.address);
-    res.json(user.toJSON());
+router.post("/userData", async (req, res) => {
+    try {
+        const user = await User.findByAddressValue(req.body.address);
+        return res.json(user.toJSON());        
+    } catch (e) {
+        res.status(400).json({
+            message: "error while fetching user's info"
+        })
+    }
 });
 
 

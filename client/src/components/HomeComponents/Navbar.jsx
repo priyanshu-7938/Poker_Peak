@@ -35,22 +35,6 @@ export default function Navbar() {
         </div>
         {/* stuff of users.. */}
         <div className="flex mx-2 gap-4">
-          <div className="flex gap-1 items-center">
-            <img src={rupee} className="h-[30px]" alt="" />
-            <div className="flex flex-col">
-              <p className="text-1xl bg-[#979797] rounded-[10px] p-1 flex truncate w-[100px] justify-between">
-                ₹ {userData?.userInfo?.pooledMoney}
-                <p
-                  className="cursor-pointer"
-                  onClick={() => {
-                    Navigate("addmoney");
-                  }}
-                >
-                  ➕
-                </p>
-              </p>
-            </div>
-          </div>
           {/* <div className="flex gap-1 items-center">
             <img src={userData?.userInfo?.avatar} className="h-[30px]" alt="" />
             <div className="flex flex-col">
