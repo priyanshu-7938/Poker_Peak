@@ -88,14 +88,13 @@ const GameInitBaby = async (contractAddress) => {
     }
     //now posting to contract...
     try{
-        //trying to get contract...
-        const TheContract = await sdk.getContract(contract);
-        const data = await TheContract.call("gameInit", [userArray])
+        const TheContract = await sdk.getContract(contractAddress);
+        const data = await TheContract.call("gameInit", [userArray]);
         console.log("!!Game Important: Pushed The Users To Game And Now Rock.!");
         console.log(data);
     }
     catch(error){
-        res.json({ "status": 100, "msg":error });
+        console.log("!!Fatel: ",error);
     }
 }
 const GameResetBaby = async (contractAddress) => {

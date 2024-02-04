@@ -51,7 +51,7 @@ export default function Room() {
 
   const [screenHeight, setScreenHeight] = useState(window.innerHeight);
 
-
+  console.log("!!!",stateOfGame);
   useEffect(() => {
     socket.on("testingEvent", () => {
       alert("i got the event Baby....");
@@ -145,7 +145,10 @@ export default function Room() {
     const myInterval = setInterval( async () => {
       const data = await TheContract.call("expectedUserAddress", [])
       setExpectedPlayer(data);
-    }, 5000);
+      fetchTheUserCards();
+      //a functionn to fetch the state of the game... here baby... 
+      fetchTheGameState();
+    }, 5000 + Math.floor(Math.random()*2000));
     //this function to clear the bug in code that sometimes the page wont get the information of the exectedUser...
     return () => clearInterval(myInterval);
   }, []); 
@@ -179,9 +182,11 @@ export default function Room() {
   }, [players]);
 
   const fetchTheUserCards = () => {
+    console.log("Fetching cards now.");
     if (!userAddress) {
       return;
     }
+    console.log(stateOfGame);
     if (stateOfGame === "resting") {
       console.log("cant fetch Cards ,game not started yet...");
       return;
@@ -205,6 +210,28 @@ export default function Room() {
       .then((result) => setTheUserCards(JSON.parse(result).cards))
       .catch((error) => console.log("error", error));
   };
+  const fetchTheGameState = async () => {
+    //fetching from the blockchain
+    const data = await TheContract.call("stateDefiner", []);
+    console.log("in the fetch game state", data);
+    switch(data){
+      case 1:
+        setStateOfGame("firstloop");
+        break;
+      case 2:
+        setStateOfGame("secondloop");
+        break;
+      case 3:
+        setStateOfGame("thirdloop");
+        break;
+      case 4:
+        setStateOfGame("ended");
+        break;
+      case 0:
+        setStateOfGame("resting");
+        break;
+    }
+  }
   const fetchTheTabelCards = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");

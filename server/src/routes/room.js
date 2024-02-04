@@ -2,7 +2,7 @@ import express from "express";
 import Room from "../models/room.js";
 import { RegisterForTheRoom } from "../controllers/room.js";
 import User from "../models/user.js";
-import { encryptWithPublicKey, decryptWithPrivateKey, GameResetBaby } from "../utils/cardDeck.js";
+import { encryptWithPublicKey, decryptWithPrivateKey, GameResetBaby, GameInitBaby } from "../utils/cardDeck.js";
 import { io } from "../app.js";
 import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
@@ -18,12 +18,10 @@ const router = new express.Router();
 router.post("/room", RegisterForTheRoom);
 router.post("/allRooms/", async (req, res) => {
   const value = await Room.getAllRooms();
-  console.log(value);
   res.json({ ...value });
 });
 
 router.post("/roomJoin", async (req, res) => {
-  console.log(req.body);
   const contract = req.body.address;
   const userAddresss = req.body.userAddress;
   const room = await Room.findByAddressValue(contract);
@@ -34,7 +32,7 @@ router.post("/roomJoin", async (req, res) => {
 
   if (user === null || user === undefined) {
     return res.status(404).json({
-      error: "please join the room with registered wallet adddress. "
+      "status":100, msg: "please join the room with registered wallet adddress."
     });
   }
 
@@ -52,7 +50,7 @@ router.post("/roomJoin", async (req, res) => {
     //gameInit util function....
     GameInitBaby(contract);
   }
-
+  io.emit("update",{});
   res.json({ ...retur, status: 200 });
   // gameInit thing.....
 });
@@ -95,19 +93,18 @@ router.post("/fetchUsers", async (req, res) => {
 });
 
 router.post("/fetchCards", async (req,res)=>{
-  //fetching cards.. here..
-  // const pri = "-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDnP7zYRvTZNBJX475pLnivqxv+NysRUbhhgX6Z9pPHxESNhTLJvlzYYLreN12dYjnOFwQA2Civ4XJA+tSplkP3nMSEAELr4FJryFZCylugRrmkoAkwJBEn2N/0vj75gnzC7Wbc14BxE3AyIjQ2PKuv1qEqD60um5OCfzQ02/PkNQIDAQAB-----END PUBLIC KEY-----";
-  // const pub = ""
+  console.log("!!fetchedCards");
 
-  // const encrypted = encryptWithPublicKey("hello",);
   const contractAddress = req.body.address;
   const userAddress = req.body.userAddress;
   const room = await Room.findByAddressValue(contractAddress);
   const user = await User.findByAddressValue(userAddress);
   const cards = await room.getUserCardsVisId(user._id);
   if(!cards){
+    console.log("!Card fetch failed.");
     res.json({"status":100,"msg":"You not part of game bro!"});
   }
+  console.log(cards);
   res.json({"status":200, "cards": cards});
 });
 
@@ -154,10 +151,10 @@ router.post("/test",async (req,res)=>{
   // await GameResetBaby(req.body.address);
 
 
-  const room = await Room.findByAddressValue("0x719A03ae0122cC82621C9a863bdF49D93d419687");
-  room.randomNumberGenerated = true;
-  await room.save({ validateBeforeSave: false });
-  res.send("done");
+  // const room = await Room.findByAddressValue("0x719A03ae0122cC82621C9a863bdF49D93d419687");
+  // room.randomNumberGenerated = true;
+  // await room.save({ validateBeforeSave: false });
+  // res.send("done");
 });
 
 export default router;

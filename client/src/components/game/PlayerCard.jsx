@@ -10,7 +10,7 @@ const OtherPlayers = ({
   address,
   avatar,
   isFolded,
-  cards = ["2_s", "J_s"]
+  cards
 }) => {
   console.log("THe use of user cards.. here...");
   //TODO: make sure you addd the cards when the address of the userAddress matches..
@@ -30,7 +30,7 @@ const OtherPlayers = ({
       );
       setCardImages(newCardImages);
     }
-  }, []);
+  }, [cards]);
 
   return (
     <div

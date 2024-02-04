@@ -191,9 +191,10 @@ roomSchema.methods.getUserCardsVisId = async function (_id) {
     return;
   }
 
-  const first = await this.encryptedGameDeck[2 * indexOfUser];
-  const second = await this.encryptedGameDeck[2 * indexOfUser + 1];
-  console.log(first, second);
+//   const first = await this.encryptedGameDeck[2 * indexOfUser];
+//   const second = await this.encryptedGameDeck[2 * indexOfUser + 1];
+    const first = await this.encryptedDeck[2 * indexOfUser];
+    const second = await this.encryptedDeck[2 * indexOfUser + 1];
   const cards = [
     decryptWithPrivateKey(first, this.privateKey),
     decryptWithPrivateKey(second, this.privateKey)
