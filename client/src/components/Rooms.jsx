@@ -86,8 +86,12 @@ const Rooms = () => {
               <div className="flex flex-col">
                 {" "}
                 {/* Left Side */}
-                <h3>Room Id: {element.contrctAddress}</h3>
-                <p>{element.status}</p>
+                <h3 className='text-primary text-[1.1rem]'>
+                <span className='text-white mr-2'>Room Id : </span>
+                  {element.contrctAddress}</h3>
+                <p className='text-green-400 text-[1.1rem]'>
+                  <span className='text-white mr-2'>Game Status : </span>
+                  {element.status}</p>
               </div>
               {/* right side */}
               <div className="h-full flex flex-col justify-center">

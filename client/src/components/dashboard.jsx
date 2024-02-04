@@ -23,9 +23,9 @@ const Dashboard = () => {
 
   return (
     <div className="bg-[#2b2b2b] w-full min-h-screen text-white">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">Gameplay History</h1>
-        <table className="w-full table-auto border-collapse">
+      <div className="container max-lg:mx-auto px-4 py-8 " >
+        <h1 className="text-3xl font-bold text-primary mb-4">Gameplay History</h1>
+        <table className="w-full table-auto border-collapse rounded-md">
           <thead>
             <tr>
               <th className="border border-gray-600 px-4 py-2">Room ID</th>

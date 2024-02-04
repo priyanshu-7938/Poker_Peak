@@ -25,13 +25,12 @@ export default function Navbar() {
       <div
         className={` ${
           !FullScreenTrigger && "hidden"
-        } flex justify-between py-1 pb-2 border-b border-gray-600`}
+        } flex justify-between py-1 pb-2 border-b border-[#A1763A]`}
       >
         <div className="flex gap-2 items-center">
           <div className="flex items-center justify-center">
             <img src={logo} className="h-[40px]" alt="" />
           </div>
-          <p className="text-2xl font-goudy italic font-bold">Poker Peak</p>
         </div>
         {/* stuff of users.. */}
         <div className="flex mx-2 gap-4">

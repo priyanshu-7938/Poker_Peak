@@ -19,6 +19,7 @@ import { CONTRACTABI } from "../utils";
 
 import { LightlinkPegasusTestnet } from "@thirdweb-dev/chains";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import Loading from "@/utils/Loading";
 
 // If used on the FRONTEND pass your 'clientId'
 const metamaskConfig = metamaskWallet();
@@ -360,11 +361,12 @@ export default function Room() {
 
   if (loading) {
     return (
-      <img
-        src="/assets/spinner.svg"
-        className="m-auto bg-black"
-        alt="loading...."
-      />
+      // <img
+      //   src="/assets/spinner.svg"
+      //   className="m-auto bg-black"
+      //   alt="loading...."
+      // />
+      <Loading />
     );
   }
 
