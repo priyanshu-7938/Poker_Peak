@@ -136,7 +136,7 @@ export default function Signup(){
     return (
         <>
             <div className="h-screen flex flex-col gap-1 items-center justify-center">
-                <div className="bg-[#303030] text-[#e9188b] w-[50%] p-5 px-6 shadow-md rounded-[30px]">
+                <div className="bg-primary text-card w-[50%] p-5 px-6 shadow-md rounded-[30px]">
                     <p className="text-4xl font-bold font-goudy">Sign Up</p>
                     <div className="flex justify-between text-input m-2">
                         <div className="flex flex-col  w-[50%]">

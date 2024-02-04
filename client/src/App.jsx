@@ -17,7 +17,7 @@ function App() {
 
   return (
     <>
-        <div className="dark bg-background text-foreground h-screen font-montserrat">
+        <div className="dark bg-background text-foreground min-h-screen font-montserrat">
           <BrowserRouter>
             <Routes>
               <Route path="/signup" element={<SignUp />} />

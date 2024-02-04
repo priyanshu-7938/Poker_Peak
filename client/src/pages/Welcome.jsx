@@ -2,104 +2,94 @@ import React from "react";
 import logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRightToLineIcon } from "lucide-react";
+import { Faq } from "@/components/Faq";
+import { Button } from "@/components/ui/button";
 
 export default function Welcome() {
   const navigator = useNavigate();
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   return (
-    <div className="h-full p-3">
+    <div className="h-full p-3 dark bg-background min-h-screen">
       <div className="flex justify-between">
         <div className="flex gap-2">
           <div className="flex items-center justify-center">
-            <img src={logo} className="h-[20px]" alt="" />
+            <img src={logo} className="w-[180px]" alt="" />
           </div>
-          <p className="text-2xl font-goudy italic font-bold">Poker Peak</p>
+        </div>
+        {/* links */}
+        <div className="flex space-x-4 text-[1.1rem] items-center">
+          <Link to="/">Home</Link>
+          <Link to="/">Contest</Link>
+          <Link to="/">Rooms</Link>
+          <Link to="/">DashBoard</Link>
         </div>
         <div className="flex gap-3">
-          {(token===null) ? (
+          {token === null ? (
             <>
-              <button
-            className="p-1 px-4 rounded-[30px] border-2 bg-[#e9188b] border-[#110a02] hover:scale-x-105 transition-all ease-in-out"
-            onClick={() => {
-              navigator("/signup");
-            }}
-          >
-            Sign up
-          </button>
-          <button
-            className="p-1 px-4 rounded-[30px] border-2 bg-[#e9188b] border-[#201509] hover:scale-x-105 transition-all ease-in-out"
-            onClick={() => {
-              navigator("/login");
-            }}
-          >
-            Log in
-          </button>
+              <Button
+                className="p-1 px-7 rounded-[30px] border-2 border-[#110a02] hover:scale-x-105 transition-all ease-in-out"
+                onClick={() => {
+                  navigator("/signup");
+                }}
+              >
+                Sign up
+              </Button>
+              <Button
+                className="p-1 px-7 rounded-[30px] border-2  border-[#201509] hover:scale-x-105 transition-all ease-in-out"
+                onClick={() => {
+                  navigator("/login");
+                }}
+              >
+                Log in
+              </Button>
             </>
-          ): (
-              <>
-                <Link className='flex hover:text-pink-500' to='/home/dashboard' >
-                  Go to DashBoard
-                  <ArrowRightToLineIcon className='ml-2' />
-                </Link>
-              </>
+          ) : (
+            <>
+              <Link className="flex hover:text-pink-500" to="/home/dashboard">
+                Go to DashBoard
+                <ArrowRightToLineIcon className="ml-2" />
+              </Link>
+            </>
           )}
-          
         </div>
       </div>
 
-      <div className="h-[80hv] pt-4 flex items-center justify-center">
-        <div className="max-w-2xl p-8 bg-white text-[#e9188b] rounded-lg shadow-md">
-          <h1 className="text-4xl font-bold mb-4 flex gap-2 text-[#707070]">
-            Welcome to{" "}
-            <p className="font-bold font-goudy text-[#000]">Poker Peak</p> 🎴
-          </h1>
-
-          <p className="text-xl mb-6 text-gray-800">
-            Explore the Future of Poker on the Blockchain!
-          </p>
-
-          <div className="grid gap-4">
-            <div className="flex items-center">
-              <p className="text-5xl">🌈</p>
-              <p className="text-lg">
-                <p className="font-bold">Decentralized Gameplay:</p> Play
-                without borders!
-              </p>
+      {/* main */}
+      <main className="px-4 max-w-[1700px] pt-24 mx-auto">
+        {/* container */}
+        <div className="flex max-lg:flex-col-reverse  justify-between items-center">
+          {/* left */}
+          <section className="flex flex-col space-y-6 items-start">
+            {/* play poker image */}
+            <div className="w-full h-[250px] max-w-[460px]">
+              <img
+                src="/assets/playpoker.png"
+                alt="Play Poker"
+                className="w-full h-full"
+              />
             </div>
-
-            <div className="flex items-center">
-              <p className="text-5xl">💎</p>
-              <p className="text-lg">
-                <p className="font-bold">Token Utility:</p> Utilize and validate
-                your gameplay with our native tokens.
-              </p>
+            {/* description */}
+            <p className='text-gray-400'>
+              Where skill meets true randomness - harnessing the power of AP13
+              Airnode RNG for an unbeatable blockchain poker experience.
+            </p>
+            {/* boxes */}
+            <div className='flex w-full gap-x-6 mt-6'>
+              <Faq />
             </div>
-
-            <div className="flex items-center">
-              <p className="text-5xl">💰</p>
-              <p className="text-lg">
-                <p className="font-bold">Crypto Winnings:</p> Win and withdraw
-                your earnings in cryptocurrency.
-              </p>
-            </div>
-
-            <div className="flex items-center">
-              <p className="text-5xl">🚀</p>
-              <p className="text-lg">
-                <p className="font-bold">Seamless Integration:</p>Connect your
-                digital wallet and experience the future of poker effortlessly.
-              </p>
-            </div>
+          </section>
+          {/* right */}
+          <div className='md:w-[600px] h-[700px] max-lg:w-full max-md:h-[500px]'>
+            <img
+              src='/assets/landing.png'
+              alt='poker face'
+              className='object-fill w-full h-full rounded-md shadow-xl'
+            />
           </div>
-
-          <p className="text-xl mt-6 text-accent">
-            Ready to shuffle up and deal in the blockchain era? 🌐🃏 Join
-            CryptoCardTables now and let the cards fall where they may! 🌟💰
-          </p>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

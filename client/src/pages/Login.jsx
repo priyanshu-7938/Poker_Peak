@@ -84,7 +84,7 @@ export default function Login() {
         <div className="bg-primary text-accent w-[50%] p-5 px-6 shadow-md rounded-[30px]">
           <p className="text-4xl font-bold font-goudy">Log In</p>
           <div className="m-2">
-            <div className="flex flex-col text-[#e9188b] gap-3">
+            <div className="flex flex-col text-card gap-3">
               <ConnectWallet
                 switchToActiveChain={true}
                 displayBalanceToken={{
@@ -95,7 +95,7 @@ export default function Login() {
               />
               {token === null && (
                 <>
-                  <p className="text-2xl  font-goudy font-bold">Password</p>
+                  <p className="text-2xl font-goudy font-bold">Password</p>
                   <input
                     type="password"
                     value={password}

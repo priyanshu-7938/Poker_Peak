@@ -20,7 +20,7 @@ export default function Sidebar() {
               <p className="font-bold">My Account</p>
               <div
                 className={`h-[3px] rounded-[30px] ${
-                  thisUrl.includes("account") ? "bg-[#3f3f3f]" : ""
+                  thisUrl.includes("account") ? "bg-[#aa7b0d]" : ""
                 }`}
               ></div>
             </div>
@@ -33,7 +33,7 @@ export default function Sidebar() {
               <p className="font-bold">Dashboard</p>
               <div
                 className={`h-[3px] rounded-[30px] ${
-                  thisUrl.includes("dashboard") ? "bg-[#3f3f3f]" : ""
+                  thisUrl.includes("dashboard") ? "bg-[#aa7b0d]" : ""
                 }`}
               ></div>
             </div>
@@ -46,7 +46,7 @@ export default function Sidebar() {
               <p className="font-bold">Tournament</p>
               <div
                 className={`h-[3px] rounded-[30px] ${
-                  thisUrl.includes("tournament") ? "bg-[#3f3f3f]" : ""
+                  thisUrl.includes("tournament") ? "bg-[#aa7b0d]" : ""
                 }`}
               ></div>
             </div>
@@ -59,7 +59,7 @@ export default function Sidebar() {
               <p className="font-bold">Rooms</p>
               <div
                 className={`h-[3px] rounded-[30px] ${
-                  thisUrl.includes("rooms") ? "bg-[#3f3f3f]" : ""
+                  thisUrl.includes("rooms") ? "bg-[#aa7b0d]" : ""
                 }`}
               ></div>
             </div>
