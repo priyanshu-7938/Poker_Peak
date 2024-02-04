@@ -13,7 +13,7 @@ const UserFoldedWithReason = async (data, io) => {
         addressToFOld: data.data.foldAddress,
         users: room.users,
     });
-    //deleting the user from the db..
+    console.log("!!Game Important: The user folded ,with reason:",data.data.reason);
 }
 const betRaised = async (data, io) => {
 // createdBy , uint256 indexed nonce, address raisersAddress, uint256 raisedTo, uint256 currentPot, address nextUser)
@@ -26,6 +26,7 @@ const betRaised = async (data, io) => {
         expectedUser: data.data.nextUser,
         raisedByAddress:raiserAddress,
     })
+    console.log("!!Game Important: The bet was raised.");
 }
 const betCalled = async (data, io) => {
     //emitCode , uint256 indexed createdOn , address indexed createdBy , uint256 indexed nonce, address callerAddress, uint256 currentPot, address nextUser
@@ -38,6 +39,7 @@ const betCalled = async (data, io) => {
         expectedUser: data.data.nextUser,
         raisedByAddress:raiserAddress,
     })
+    console.log("!!Game Important: The bed was called...");
 
 }
 const deckPost = async (data, io) => {
@@ -69,6 +71,8 @@ const StateDiscloser = async (data, io) => {
     if(data.data.stateTransitationTo === "ended" ){
         GameResetBaby(room.contrctAddress);
     }
+    console.log("!!Game Important: The game state changed.");
+
 }
 const RandomNumberGenerated = async (data, io) => {
     //(uint8 emitCode , uint256 indexed createdOn ,address indexed createdBy ,  uint256 indexed nonce , uint256 randomNumber )
@@ -80,6 +84,7 @@ const RandomNumberGenerated = async (data, io) => {
         //wallaha we can proceed to the game
         GameInitBaby(room.contrctAddress);
     }
+    console.log("!important rand generated....");
     io.emit("RandomNumberGenerated",{
         "status":200,
         "msg":"Deck was poseted.",

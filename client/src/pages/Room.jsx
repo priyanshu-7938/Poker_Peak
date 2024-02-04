@@ -12,7 +12,8 @@ import { fullScreenState } from "@/atoms/triggers";
 import useSocket from "@/hooks/useSocket";
 import Chats from "@/components/game/Chats";
 import { Toaster, toast } from "sonner";
-import { useAddress } from "@thirdweb-dev/react";
+import { useAddress, useContract, metamaskWallet, useConnect } from "@thirdweb-dev/react";
+import { CONTRACTABI } from "../utils";
 
 //contract read stuff...
 
@@ -21,17 +22,20 @@ import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import Loading from "@/utils/Loading";
 
 // If used on the FRONTEND pass your 'clientId'
+const metamaskConfig = metamaskWallet();
 const sdk = new ThirdwebSDK(LightlinkPegasusTestnet, {
   clientId: "5569ec4bd273c9e940fe4ff0cc4dd685",
 });
 
-const TheContract = await sdk.getContract("0x1B35D993De3a665796a152DAfbC708D2cF98D8bE");
+const TheContract = await sdk.getContract("0x719A03ae0122cC82621C9a863bdF49D93d419687");
 
 //contract read initilisation done....
 
 export default function Room() {
   // const [message, setMessage] = useState("");
   // const { emitMessage } = useSocketContext();
+  const theDefaultContract = useContract("0x719A03ae0122cC82621C9a863bdF49D93d419687",CONTRACTABI);
+  const connect = useConnect();
   const [params] = useSearchParams();
   const roomToken = params.get("roomToken");
   const [loading, setLoading] = useState(true);
@@ -42,6 +46,8 @@ export default function Room() {
   const socket = useSocket();
 
   //game Status mainntaining...
+  const [ wallet , setWallet ] = useState();
+  // const [ TheSecondContract , setTheSecondContract ] = useState();
   const [stateOfGame, setStateOfGame] = useState("resting");
   const [theCurrentBet, setTheCurrentBet] = useState(0);
   const [theUserCards, setTheUserCards] = useState();
@@ -51,8 +57,15 @@ export default function Room() {
   const [players, setPlayers] = useState();
 
   const [screenHeight, setScreenHeight] = useState(window.innerHeight);
-
   console.log("!!!",stateOfGame);
+  console.log("!!!",theExpectedPlayer);
+  useEffect(()=>{
+    important();
+  },[]);
+  const important = async () => {
+    const waet = await connect(metamaskConfig);
+    setWallet(waet);
+  }
   useEffect(() => {
     socket.on("testingEvent", () => {
       alert("i got the event Baby....");
@@ -140,16 +153,15 @@ export default function Room() {
 
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 4000);
   }, [socket]);
   useEffect(() => {
     const myInterval = setInterval( async () => {
-      const data = await TheContract.call("expectedUserAddress", [])
-      setExpectedPlayer(data);
+      fetchExpectedUser();
       fetchTheUserCards();
-      //a functionn to fetch the state of the game... here baby... 
       fetchTheGameState();
-    }, 5000 + Math.floor(Math.random()*2000));
+      fetchThePotValue();
+    }, 5000 + Math.floor(Math.random()*2000));//this is done so that the user, all user does not request the server at once...
     //this function to clear the bug in code that sometimes the page wont get the information of the exectedUser...
     return () => clearInterval(myInterval);
   }, []); 
@@ -174,20 +186,52 @@ export default function Room() {
   }, []);
   useEffect(() => {
     // ['resting','firstloop','secondloop','thirdloop','ended'],
-    if (stateOfGame === "resting") return;
-    fetchTheTabelCards();
+    if (stateOfGame !== "resting"){
+      fetchTheTabelCards();
+    }
+    if(stateOfGame === "ended"){
+      message.info("The game has ended with the Player winning!, the tokens will be transected to the winner via server",5000);
+      navigate("/home/rooms");
+    }
   }, [stateOfGame]);
 
-  useEffect(() => {
-    console.log(players);
-  }, [players]);
+  const foldCommand = async () => {
+    const data = await theDefaultContract.contract.call("fold", []);
+    console.log(data);
+    message.info("You folded!!", 2000);
+  }
+  const callCommand = async () => {
+    const data = await theDefaultContract.contract.call("callBet", [],{
+      value: theCurrentBet * 1000000000000000000,
+    });
+    console.log(data);
+    message.info("You Called!!", 2000);
+    // const data = await TheContract.call("fold", []);
+    // console.log(data);
+    // alert("call");
+  }
+  const raiseCommand = async () => {
+    const val = parseFloat(prompt("Enter raised Amount! (in ethers)"));
+    console.log(val*1000000000000000000);
+    if( val <= theCurrentBet || val> theCurrentBet*2){
+      message.error("the raised amount should be lesss than twice of current bet, and greater thatn the bet.",3000);
+      return;
+    }
+    const data = await theDefaultContract.contract.call("raiseBet", [val*1000000000000000000],{
+      value: val * 1000000000000000000,
+    });
+    console.log(data);
+    message.info("You raised the bet to:"+val,2000);
+  }
 
+  const fetchExpectedUser = async () => {
+    const data = await TheContract.call("expectedUserAddress", [])
+    setExpectedPlayer(data);
+  }
   const fetchTheUserCards = () => {
-    console.log("Fetching cards now.");
     if (!userAddress) {
       return;
     }
-    console.log(stateOfGame);
     if (stateOfGame === "resting") {
       console.log("cant fetch Cards ,game not started yet...");
       return;
@@ -214,7 +258,7 @@ export default function Room() {
   const fetchTheGameState = async () => {
     //fetching from the blockchain
     const data = await TheContract.call("stateDefiner", []);
-    console.log("in the fetch game state", data);
+    console.log("in the fetch game state", data);    
     switch(data){
       case 1:
         setStateOfGame("firstloop");
@@ -232,6 +276,12 @@ export default function Room() {
         setStateOfGame("resting");
         break;
     }
+  }
+  const fetchThePotValue = async () => {
+    const data = await TheContract.call("currentBet", []);
+    setTheCurrentBet(parseInt(data._hex.toString(),16)/1000000000000000000);
+    const data1 = await TheContract.call("pooledAmount", []);
+    setThePoolAmount(parseInt(data1._hex.toString(),16)/10000000000000000000);
   }
   const fetchTheTabelCards = () => {
     var myHeaders = new Headers();
@@ -309,8 +359,6 @@ export default function Room() {
   // };
   // useSocketSetupForRoom();
 
-  console.log("players : ", players);
-
   if (loading) {
     return (
       // <img
@@ -325,10 +373,6 @@ export default function Room() {
   if (!roomToken) {
     return <Navigate to="/home/rooms" />;
   }
-
-  const fullScreenHandler = () => {
-    setFullScreenTrigger((prev) => !prev);
-  };
 
   return (
     <main className="w-full h-[100vh] bg-gradient-to-tr from-[#8b0000c7] via-[#580101] to-[#8B0000]  rounded-md">
@@ -359,9 +403,9 @@ export default function Room() {
         {/* Table Image Div */}
         <div className={`flex flex-wrap relative w-full max-h-max m-auto max-w-[1100px] ${screenHeight < 800 && 'h-[470px] mb-10' }`}>
           <img className="w-full h-full" src={"/assets/table-nobg.svg"} alt="table" />
-          <div className="absolute top-[20%] left-[45%] flex flex-col items-center gap-2">
-            <img src="/assets/pot.svg" alt="pot" className="max-w-[75px]" />
-            <h2 className="font-bold text-white text-[2.4rem]">$9023</h2>
+          <div className="absolute top-[20%] left-[35%] flex flex-col items-center gap-2">
+            <h2 className="font-bold text-white text-[2.4rem]">Pot Value : {thePoolAmount}</h2>
+            <h2 className="font-bold text-white text-[2.4rem]">Current Bet : {theCurrentBet}</h2>
           </div>
           {/* players */}
           <div
@@ -380,35 +424,35 @@ export default function Room() {
                       : index === 3
                       ? "relative left-[20%] "
                       : index === 5
-                      ? "absolute left-[40%] mb-[40px] border rounded-md border-black"
+                      ? "absolute left-[40%] "
                       : ""
                   }`}`}
                 >
-                  <PlayerCard {...player} cards={theUserCards} />
+                  <PlayerCard {...player} cards={theUserCards} theExpectedPlayer={theExpectedPlayer} />
                 </div>
               ))}
           </div>
         </div>
         {/* Buttons */}
           <div className={`flex self-center items-center space-x-3 pb-4 ${screenHeight < 800 && 'pb-0' }`}>
-            <Button
-              size="lg"
-              className={`px-14 border border-black text-white rounded-full bg-[#0f0f0f] ${theExpectedPlayer && theExpectedPlayer === userAddress ? "":"cursor-not-allowed opacity-50"}`}
+            <button
+              onClick={foldCommand}
+              className={` border-black text-white rounded-full bg-[#0f0f0f] h-[40px] px-10 py-2  ${theExpectedPlayer && theExpectedPlayer === userAddress ? "":"cursor-not-allowed opacity-50"}`}
             >
               Fold
-            </Button>
-            <Button
-              size="lg"
-              className={`px-14 border border-black text-white rounded-full bg-[#516d3c] ${theExpectedPlayer && theExpectedPlayer === userAddress ? "":"cursor-not-allowed opacity-50"}`}
+            </button>
+            <button
+              onClick={callCommand}
+              className={` border-black text-white rounded-full bg-[#516d3c] h-[40px] px-10 py-2  ${theExpectedPlayer && theExpectedPlayer === userAddress ? "":"cursor-not-allowed opacity-50"}`}
             >
               Call
-            </Button>
-            <Button
-              size="lg"
-              className={`px-14 border border-black text-white rounded-full bg-[#9f7c40] ${theExpectedPlayer && theExpectedPlayer === userAddress ? "":"cursor-not-allowed opacity-50"}`}
+            </button>
+            <button
+              onClick={raiseCommand}
+              className={` border-black text-white rounded-full bg-[#9f7c40] h-[40px] px-10 py-2  ${theExpectedPlayer && theExpectedPlayer === userAddress ? "":"cursor-not-allowed opacity-50"}`}
             >
               Raise
-            </Button>
+            </button>
           </div>
       </div>
     </main>

@@ -88,7 +88,7 @@ const sdk = ThirdwebSDK.fromPrivateKey("b468b6263292af56fcb78cfce1fc83ba50442230
       secretKey: "TbEJa6nQ01Nc7BHZuOG3jAiTOOTPN_AkeEmt8Qnlp7aQmgfzurz0z8_yiGOrVY-4CL5HdxHp4vbSxwkMzNuD8w",
                   
     } );
-const contract = await sdk.getContract("0x1B35D993De3a665796a152DAfbC708D2cF98D8bE");
+const contract = await sdk.getContract("0x719A03ae0122cC82621C9a863bdF49D93d419687");
  
 //event for contract...
 contract.events.addEventListener("UserFoldedWithReason", (event) => UserFoldedWithReason(event,io));

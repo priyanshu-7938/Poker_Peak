@@ -77,7 +77,7 @@ const GameInitBaby = async (contractAddress) => {
     //game init baby...
     //TODO: remove the below comment it is there because it should nt be run this time cause it does not need to be for the first loop.
 
-    // _postDeckAndShuffel(contractAddress);
+    _postDeckAndShuffel(contractAddress);
     
     const room = await Room.findByAddressValue(contractAddress);
     const users = room.users;
@@ -100,29 +100,31 @@ const GameInitBaby = async (contractAddress) => {
 const GameResetBaby = async (contractAddress) => {
     
     const room = await Room.findByAddressValue(contractAddress);
-
+    const contract = await sdk.getContract(contractAddress);
     try{
         //privateKeyDeployed.
-        await contract.call("uploadPrivateKey", [_privatekey])
+        await contract.call("uploadPrivateKey", [room.privateKey])
         console.log("!!Game Important: entered the GameDeckUploded.");
         //getting the expeectedUser he will be the winner...
         const _winner = await contract.call("expectedUserAddress", []);
         
         //calling the gameResetFunction
+        //due to time constrains... im adding myself as the winner for each game this could be done.
+        //via agorithm jus going tru the users and checking all the users cards and fold status, then outputtiing the winner...
         await contract.call("hardResetWithCleanup", [_winner]);
         console.log("!!Game Important: Reset The Game With CleanUp & Winner Funded");
         
         //now dbms cleanup... bebo and new initiation...
-        await room.flushData();
-        await room.initGame();
+        room.flushData();
         
         // generate the random number...
         const _sponsorWallet = room.sponcerAddress;
         await contract.call("GenerateRandomNumber", [_sponsorWallet]);
         console.log("!!Game Important: The request for new random number if initiated.!");
     }catch(error){
-        console.log("!!ERROR: at the resetting of the system...");
+        console.log("!!ERROR: at the resetting of the system...",error);
     }
+
 }
 const _postDeckAndShuffel = async (contractAddress) => {
     //uploding the deck of the game. AFTER: randGenerated.
