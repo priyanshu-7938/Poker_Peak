@@ -28,9 +28,11 @@ The seamless flow of transactions, state emissions, and server updates continues
 
 Project update images!.
 
-![Demo Image 1](https://github.com/priyanshu-7938/ENCODE_lightlink/blob/master/icons8-tick-50.png?raw=true)
-![Demo Image 2](https://github.com/priyanshu-7938/ENCODE_lightlink/blob/master/image.png?raw=true)
+![image](https://github.com/priyanshu-7938/ENCODE_lightlink/assets/115649011/3a0b89d5-e1aa-4240-ad57-c755d9f9de29)
 
+![image](https://github.com/priyanshu-7938/ENCODE_lightlink/assets/115649011/32c19397-7679-4486-952c-6894c18c6a54)
+
+![image](https://github.com/priyanshu-7938/ENCODE_lightlink/assets/115649011/1d0a51c5-688b-4bd7-84a9-b3e2297e961a)
 ## Architecture
 
 The artitecture if a bit slow , to maintain the Possestion of funds to user itself, and along with the immutability using contract,and eventually the waiting time does indeed gets large ,well thats mke the game more intresting( keeping the players on the edgs!!)
