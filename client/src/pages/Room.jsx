@@ -24,7 +24,7 @@ const sdk = new ThirdwebSDK(LightlinkPegasusTestnet, {
   clientId: "5569ec4bd273c9e940fe4ff0cc4dd685",
 });
 
-const TheContract = await sdk.getContract("0x719A03ae0122cC82621C9a863bdF49D93d419687");
+const TheContract = await sdk.getContract("0x1B35D993De3a665796a152DAfbC708D2cF98D8bE");
 
 //contract read initilisation done....
 

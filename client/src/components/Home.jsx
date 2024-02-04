@@ -1,6 +1,6 @@
 // import { useEffect } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { Account, Dashboard, Tournament, AddMoney } from "../components";
+import { Account, Dashboard, Tournament } from "../components";
 import { NoPage } from "../pages";
 import Navbar from "./HomeComponents/Navbar";
 import Sidebar from "./HomeComponents/Sidebar";
@@ -48,7 +48,6 @@ export default function Home() {
           <Route path="rooms" element={<Rooms />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="tournament" element={<Tournament />} />
-          <Route path="addMoney" element={<AddMoney />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </div>

@@ -9,8 +9,6 @@ export default function Sidebar() {
   useEffect(() => {
     console.log("url : ", location.pathname);
   }, [location]);
-    
- 
 
   return (
     <div className="flex flex-col h-full bg-accent">
@@ -62,19 +60,6 @@ export default function Sidebar() {
               <div
                 className={`h-[3px] rounded-[30px] ${
                   thisUrl.includes("rooms") ? "bg-[#3f3f3f]" : ""
-                }`}
-              ></div>
-            </div>
-          </div>
-        </Link>
-        <Link to={"addMoney"}>
-          <div className="flex gap-1 items-center">
-            <p className="text-3xl">💶</p>
-            <div className="flex flex-col">
-              <p className="font-bold">Add Money</p>
-              <div
-                className={`h-[3px] rounded-[30px] ${
-                  thisUrl.includes("addMoney") ? "bg-[#3f3f3f]" : ""
                 }`}
               ></div>
             </div>
