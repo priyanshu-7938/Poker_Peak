@@ -35,7 +35,20 @@ Project update images!.
 ![image](https://github.com/priyanshu-7938/ENCODE_lightlink/assets/115649011/1d0a51c5-688b-4bd7-84a9-b3e2297e961a)
 ## Architecture
 
-The artitecture if a bit slow , to maintain the Possestion of funds to user itself, and along with the immutability using contract,and eventually the waiting time does indeed gets large ,well thats mke the game more intresting( keeping the players on the edgs!!)
+For the artitecture, 
+A feedback loop where the game actual state is maintained on the chain, the users change the state (i.e. make txn for game) ,then these state change are recorded on server and a second state is maintained on server, Also the state is relayed to the users. and this go's on wntill game ends.
+
+For the specific details , like how the deck is created and how the cards are maintinaned private till the end of the game!
+
+Card Serurity:
+  a encrypted deck is posted to contract which be used by the game. Shuffles the deck then emits a event containing "array which correspondes to specific (6) users.".
+  on server side these cords are stored and then decrypted then given to users, Later as the game ends the private key to decrypt the cards are posted to contract!
+
+  * even if the server is maleious(acting wrong) it can't give diffrent cards, as the encrypted cards which are corresponds to cards are allready on chain "Imutabilility of cards." 
+Key Feature:
+  The way The Entropy protocall worrks, similarly this game contract is designed so that, untill one of the party is fair the game will be fair, here in our contract the Contract is itself one of the Party, and the contract behavior is known an fair so this whole game works...( by the way, the second pary here is server, which relays the information.)
+
+The Possestion of funds isunder user itself, and along with the immutability using contract,and eventually the waiting time does indeed gets large ,well thats mke the game more intresting( keeping the players on the edgs!!)
 This Problem can be eassiely cleared by using a high throttle chains, intended for gaming!.
 ![The basic working artitecture!](https://github.com/priyanshu-7938/ENCODE_lightlink/blob/master/WhatsApp%20Image%202024-01-20%20at%2013.28.36_4c138b1a.jpg?raw=true)
 
