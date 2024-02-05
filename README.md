@@ -88,7 +88,7 @@ The reshuffled cards are emitted, and their states are observed on the server. T
 - _Feature 3: the generated deck it totally unpredictable and the game is fair ,given that the server maintains the private key and keeps it a secret.
 
 ## Progress Till Now
-  the game (mechanism/ psuedo state machine)contract is completed and working😝! Checkout the deployed demo contract on address 0x10c31BCdefeb74D481681358CCF6EDCca687e6A2 : lightlink pegesis testnet.
+  the game (mechanism/ psuedo state machine)contract is completed and working😝! Checkout the deployed demo contract on     https://pegasus.lightlink.io/address/0x719A03ae0122cC82621C9a863bdF49D93d419687 ::lightlink pegesis testnet::.
   The fronntend is under development
   And same for the server fro the game.
 
