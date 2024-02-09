@@ -14,6 +14,9 @@ Welcome to our online poker 🎉 featuring 52 decks, where the server acts as th
   ### Game Implementation 🧑‍💻
 The game is implemented using a pseudo-state machine architecture on a smart contract. In this pseudo-state machine, the game transitions between different states, each opening up possibilities for specific functions to be called. This architecture ensures a structured and dynamic gameplay experience.
 
+### Use Of ApI3 QRNG
+For true randomness in shuffling cards in our poker game, we decided to utilize apI3 QRNG and an Affine Cipher.
+
 ### State Emission 🌟 
 
 What sets this game apart is its continuous state emission. On each state change, the game emits its current state. These emitted states are observed by a server, allowing real-time updates. This crucial information is then seamlessly presented to all connected users, creating an immersive and synchronized gaming environment.
