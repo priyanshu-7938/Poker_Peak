@@ -5,6 +5,7 @@ import { ArrowRightToLineIcon } from "lucide-react";
 import { Faq } from "@/components/Faq";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
+import { Poker3dCard } from "@/components/Poker3dCard";
 
 export default function Welcome() {
   const navigator = useNavigate();
@@ -72,26 +73,27 @@ export default function Welcome() {
               />
             </div>
             {/* description */}
-            <p className='text-[#9c9c9c] text-[1.1rem] lg:w-[90%]'>
+            <p className="text-[#9c9c9c] text-[1.1rem] lg:w-[90%]">
               Where skill meets true randomness - harnessing the power of AP13
               Airnode RNG for an unbeatable blockchain poker experience.
             </p>
             {/* boxes */}
-            <div className='flex w-[82%] max-md:w-full gap-x-6 mt-6'>
+            <div className="flex w-[82%] max-md:w-full gap-x-6 mt-6">
               <Faq />
             </div>
           </section>
           {/* right */}
-          <div className='md:w-[600px] h-[700px] max-lg:w-full max-md:h-[500px]'>
-            <img
+          <div className="md:w-[600px] h-[700px] max-lg:w-full max-md:h-[500px]">
+            {/* <img
               src='/assets/landing.png'
               alt='poker face'
               className='object-fill w-full h-full rounded-md shadow-xl'
-            />
+            /> */}
+            <Poker3dCard />
           </div>
         </div>
       </main>
-      <Footer className='absolute bottom-2' />
+      <Footer className="absolute bottom-2" />
     </div>
   );
 }
