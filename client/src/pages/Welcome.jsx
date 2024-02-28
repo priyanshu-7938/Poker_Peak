@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRightToLineIcon } from "lucide-react";
 import { Faq } from "@/components/Faq";
